@@ -11,6 +11,7 @@ pub enum TokenType {
     Void,
     Int,
     Float,
+    Const,
     IntConst,
     FloatConst,
 
