@@ -3,6 +3,11 @@ name = "sysy-α"
 version = "0.1.0"
 edition = "2021"
 
+author = "CrystalAnalyst"
+nickname = "kevin"
+school = "HDU"
+email = "kevin91cooland@gmail.com"
+
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
