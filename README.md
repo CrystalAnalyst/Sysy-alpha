@@ -1,2 +1,2 @@
 # Sysy-alpha
-A compiler front-end for SysY Langauge(2022).
+A compiler front-end for SysY Language(2022).
