@@ -88,6 +88,7 @@ pub enum NodeType {
         把Decl和FuncDef以及与它们相联系的类型单独作为两大类, 再加上语言本身的保留字两大类.
     */
 
+    /* 常变量声明-获取-操作类 */
     /*
         在Sysyc中, Decl指Value declaration(常变量声明,不包含函数声明).可能的情况如下（不完全):
         1. 整形声明     eg: int a = 10;
@@ -109,19 +110,24 @@ pub enum NodeType {
     */
     DeclStmt(Vec<Node>),
     InitList(Vec<Node>),
+    // Name, [index], Exp, lhs_exp.
+    // eg: a[1] = 10; 在此之前, a[1] = 0(lhs_exp);
     Assign(String, Option<Vec<Node>>, Box<Node>, Box<Node>),
-    BinOp,
-    Aceess,
+    // ArrayName, [index], Exp(二维数组按行取可以取出一行元素,Exp在这里就代表多维数组中按某一维度进行访问).
+    Aceess(String, Option<Vec<Node>>, Box<Node>),
+    // BinaryOperator, lhs, rhs.
+    BinOp(TokenType, Box<Node>, Box<Node>),
 
     /* 函数类 */
-    FuncDef,
-    Block,
-    Return,
-    Call,
+    // FuncDef(Type, Name, [Params], Block).
+    FuncDef(BasicType, String, Vec<Node>, Box<Node>),
+    Block(Vec<Node>),
+    Return(Option<Box<Node>>),
+    Call(String, Vec<Node>, Box<Node>),
 
     /* 结构-循环类 */
-    If,
-    While,
+    If(Box<Node>, Box<Node>, Option<Box<Node>>),
+    While(Box<Node>, Box<Node>),
     Conitnue,
     Break,
 
