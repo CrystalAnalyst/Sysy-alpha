@@ -12,6 +12,8 @@ enum CharType {
     Other(char), // 表示在一个"特殊"字符char,特殊字符在于它既不是数字也不是字母.
 }
 
+/*----------------About token-----------------*/
+
 #[derive(Clone)]
 pub struct Token {
     /*
@@ -29,6 +31,7 @@ pub struct Token {
     pub endpos: usize,
 }
 
+/* 实现Debug trait, 让Token可以被打印到控制台或者指定文件. */
 impl std::fmt::Debug for Token {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         //get token content
@@ -36,12 +39,12 @@ impl std::fmt::Debug for Token {
         //write token to stdout Stream.
         write!(
             f,
-            "Token{{\n\ttype:{:?}\n\tcontent: {} \n\tstart:{}\n\tend:{}\n\tlineno:{}\n}}",
+            "Token{{\n\ttype:{:?}\n\tcontent: {} \n\tline:{}\n\tstartColumn:{}\n\tendColumn:{}\n}}",
             self.sort,
             content,
+            self.line_no,
             self.startpos - *self.line_start, //开始列号.
-            self.endpos - *self.line_start,   //结束列号.
-            self.line_no
+            self.endpos - *self.line_start    //结束列号.
         )
         /*
             返回一个Result, 这个Result是什么? 它是一个枚举类型, 它有两个值, Ok和Err.
@@ -73,6 +76,7 @@ impl Token {
     }
 }
 
+/*----------------About Lexer----------------- */
 pub struct Lexer {
     chars: Rc<Vec<char>>,
     current: usize,
@@ -94,30 +98,33 @@ impl Lexer {
         参数中带有&self的方法可以用 instance.method()调用, 否则只能用 structName::method()调用(类似于C++的静态函数).
     */
 
+    /* Lexer的构造函数 */
     fn new(path: Rc<String>) -> Self {
         Lexer {
             chars: Rc::new(Self::get_source(&path)),
             current: 0,
             line_starts: vec![0],
-            line_no: 1,
-            tokens: vec![], //用于存放解析好的token。
+            line_no: 1,     //调研各大IDE, 行号都是从1开始.
+            tokens: vec![], //用于存放提取出来的token。
             source: path,
             is_panicked: false,
         }
     }
 
+    /* 给予Lexer识别并提取不同类型token的能力 */
     fn new_token(&self, sort: TokenType) -> Token {
         Token::new(
             sort,
             self.chars.clone(),
             self.source.clone(),
-            Rc::new(self.line_starts[self.line_no - 1]), //行号从1开始,列号从0开始,我说的.
+            Rc::new(self.line_starts[self.line_no - 1]), //行号从1开始,列号从0开始.
             self.line_no,
             self.current,
             0,
         )
     }
 
+    /* 读取文件内容 */
     fn get_source(path: &str) -> Vec<char> {
         let mut content = String::new();
         /*
@@ -132,7 +139,7 @@ impl Lexer {
         content.chars().collect()
     }
 
-    // 预处理, 主要是去掉空格和换行符, 并将其转换为对应的枚举类型.
+    /* 预处理, 主要是去掉空格和换行符, 并将其转换为对应的枚举类型.*/
     fn pre_process(&self) -> Option<CharType> {
         self.chars.get(self.current).map(|c| match c {
             ' ' | '\t' => CharType::Spacebar,
@@ -143,6 +150,7 @@ impl Lexer {
         })
     }
 
+    /* 扫描数字,并根据不同进制进行处理. */
     fn scan_number(&mut self) {
         match self.chars.get(self.current..self.current + 2) {
             //若是以0x(0X)开头, 则说明是十六进制数.
@@ -159,6 +167,7 @@ impl Lexer {
         }
     }
 
+    /* 根据进制计算数字的值,将"值信息"放入token中,再将token推入tokens(存放token的向量)中. */
     fn parse_number(&mut self, base: u32) {
         let mut sum = 0;
         let mut len = 0;
@@ -176,6 +185,14 @@ impl Lexer {
         self.tokens.push(t);
     }
 
+    /*
+        扫描标识符, 并判断是否是关键字.
+        整体的思路是:
+        step1. 提取出标识符的name, 它可能是关键字, 也可能是标识符.
+        step2. 把name与预先做好的关键字表进行匹配, 匹配到了就是关键字.
+        step3. 遍历关键字表完了都没匹配上, 就是真正意义上的标识符.
+        tips: 不顾按时标识符还是关键字, 识别好了都得new一个token出来把它们信息装好后推入tokens.
+    */
     fn scan_identifier(&mut self, keywords: &HashMap<String, TokenType>) {
         let mut len = 1;
         while let Some(c) = self.chars.get(self.current + len) {
@@ -204,6 +221,7 @@ impl Lexer {
         self.tokens.push(t); //把识别到的token加入tokens中, 这就是词法分析的根本目的嘛！
     }
 
+    /* 处理行注释 */
     fn line_comment(&mut self) {
         while self.chars.get(self.current) != Some(&'\n') {
             self.current += 1;
@@ -241,6 +259,7 @@ impl Lexer {
         );
     }
 
+    /* 用于处理报错信息, 完全自定义 */
     fn error(&mut self, msg: &str, suggest: &str) {
         /* step1. collect error info */
         let mut len = 0;
@@ -274,6 +293,7 @@ impl Lexer {
         self.is_panicked = true;
     }
 
+    /* Lexer做词法分析的核心函数, 调用了上述所有封装好的函数, 对源字符流进行解析. */
     fn scan(
         &mut self,
         keywords: &HashMap<String, TokenType>,
@@ -325,6 +345,7 @@ impl Lexer {
         }
     }
 
+    /* 单符号表 */
     fn single_sign(c: char) -> Option<TokenType> {
         use TokenType::*;
         match c {
@@ -370,6 +391,7 @@ pub fn tokenize(path: String) -> Vec<Token> {
     lexer.tokens
 }
 
+/* 关键字表 */
 fn keyword_table_init() -> HashMap<String, TokenType> {
     let mut table = HashMap::new();
 
@@ -388,6 +410,7 @@ fn keyword_table_init() -> HashMap<String, TokenType> {
     table
 }
 
+/* 双符号运算符表 */
 fn double_sign_table_init() -> HashMap<String, TokenType> {
     let mut table = HashMap::new();
 

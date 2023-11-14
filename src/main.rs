@@ -1,4 +1,3 @@
-use colored::Colorize;
 use std::path::Path;
 use sysy_alpha::{lexer::tokenize, utils::print_tokens};
 
