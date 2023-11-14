@@ -378,7 +378,7 @@ impl Lexer {
     }
 }
 
-/*-----------Library function----------------*/
+/*---------------Library function----------------*/
 
 /* tokenize: use Lexer to tokenize the source(stored in path), charStreams -> Tokens */
 pub fn tokenize(path: String) -> Vec<Token> {
@@ -397,7 +397,7 @@ pub fn tokenize(path: String) -> Vec<Token> {
     lexer.tokens
 }
 
-/*-------------tools function-------------------*/
+/*---------------tools function-------------------*/
 
 /* 关键字表 */
 fn keyword_table_init() -> HashMap<String, TokenType> {

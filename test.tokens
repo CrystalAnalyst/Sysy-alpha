@@ -64,19 +64,19 @@ Token{
 }
 TokenNo:8
 Token{
-	type:IntNumber(1)
-	content: 1 
+	type:IntNumber(10)
+	content: A 
 	line:2
-	startColumn:12
-	endColumn:13
+	startColumn:14
+	endColumn:15
 }
 TokenNo:9
 Token{
 	type:Semicolon
 	content: ; 
 	line:2
-	startColumn:13
-	endColumn:14
+	startColumn:15
+	endColumn:16
 }
 TokenNo:10
 Token{
@@ -105,48 +105,88 @@ Token{
 TokenNo:13
 Token{
 	type:IntNumber(2)
-	content: 2 
+	content: 02 
 	line:3
 	startColumn:12
-	endColumn:13
+	endColumn:14
 }
 TokenNo:14
 Token{
 	type:Semicolon
 	content: ; 
 	line:3
-	startColumn:13
-	endColumn:14
+	startColumn:14
+	endColumn:15
 }
 TokenNo:15
 Token{
-	type:Return
-	content: return 
+	type:Int
+	content: int 
 	line:4
 	startColumn:4
-	endColumn:10
+	endColumn:7
 }
 TokenNo:16
 Token{
-	type:IntNumber(0)
-	content: 0 
+	type:Identifier("c")
+	content: c 
 	line:4
-	startColumn:11
-	endColumn:12
+	startColumn:8
+	endColumn:9
 }
 TokenNo:17
 Token{
-	type:Semicolon
-	content: ; 
+	type:Assign
+	content: = 
+	line:4
+	startColumn:10
+	endColumn:11
+}
+TokenNo:18
+Token{
+	type:IntNumber(3)
+	content: 3 
 	line:4
 	startColumn:12
 	endColumn:13
 }
-TokenNo:18
+TokenNo:19
+Token{
+	type:Semicolon
+	content: ; 
+	line:4
+	startColumn:13
+	endColumn:14
+}
+TokenNo:20
+Token{
+	type:Return
+	content: return 
+	line:5
+	startColumn:4
+	endColumn:10
+}
+TokenNo:21
+Token{
+	type:IntNumber(0)
+	content: 0 
+	line:5
+	startColumn:11
+	endColumn:12
+}
+TokenNo:22
+Token{
+	type:Semicolon
+	content: ; 
+	line:5
+	startColumn:12
+	endColumn:13
+}
+TokenNo:23
 Token{
 	type:RightBrace
 	content: } 
-	line:5
+	line:6
 	startColumn:0
 	endColumn:1
 }

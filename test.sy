@@ -1,5 +1,5 @@
 int main() {
-    int a = 0x1; 
+    int a = 0xA; 
     int b = 02; 
     int c = 3;
     return 0;
