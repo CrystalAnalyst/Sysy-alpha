@@ -24,7 +24,7 @@ pub struct Token {
     pub sort: TokenType,
     pub buf: Rc<Vec<char>>,
     pub source: Rc<String>,
-    pub line_start: usize,
+    pub line_start: Rc<usize>,
     pub line_no: usize,
     pub startpos: usize,
     pub endpos: usize,
@@ -40,8 +40,8 @@ impl std::fmt::Debug for Token {
             "Token{{\n\ttype:{:?}\n\tcontent: {} \n\tstart:{}\n\tend:{}\n\tlineno:{}\n}}",
             self.sort,
             content,
-            self.startpos - self.line_start,
-            self.endpos - self.line_start,
+            self.startpos - *self.line_start,
+            self.endpos - *self.line_start,
             self.line_no
         )
         /*
@@ -56,7 +56,7 @@ impl Token {
         sort: TokenType,
         buf: Rc<Vec<char>>,
         source: Rc<String>,
-        line_start: usize,
+        line_start: Rc<usize>,
         line_no: usize,
         startpos: usize,
         endpos: usize,
@@ -91,7 +91,7 @@ impl Lexer {
         tips:Rust的impl struct相当于Go的interface, 可以“类比”C++中写在对象内部的成员函数.
         impl struct是一系列方法签名, 相当于是为这个struct对象定义了一系列行为(Action).
         在impl中, Self表示结构体类型, self表示结构体的实例,
-        参数中带有&self的方法可以用 instance.method()调用, 否则只能用 structName::method()调用.
+        参数中带有&self的方法可以用 instance.method()调用, 否则只能用 structName::method()调用(类似于C++的静态函数).
     */
 
     fn new(path: Rc<String>) -> Self {
@@ -111,7 +111,7 @@ impl Lexer {
             sort,
             self.chars.clone(),
             self.source.clone(),
-            self.line_starts[self.line_no - 1],
+            Rc::new(self.line_starts[self.line_no - 1]),
             self.line_no,
             self.current,
             0,
