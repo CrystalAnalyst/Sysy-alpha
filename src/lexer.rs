@@ -1,5 +1,4 @@
 use crate::TokenType;
-
 use std::collections::HashMap;
 use std::fs::File;
 use std::io::prelude::Read;
@@ -242,7 +241,38 @@ impl Lexer {
         );
     }
 
-    fn error(&mut self, msg: &str, suggest: &str) {}
+    fn error(&mut self, msg: &str, suggest: &str) {
+        /* step1. collect error info */
+        let mut len = 0;
+        let thisline = self.line_starts[self.line_no - 1];
+        for &c in self.chars[thisline..].iter() {
+            if c == '\n' {
+                break;
+            }
+            len += 1;
+        }
+        let error_info: String = self.chars[thisline..thisline + len].iter().collect();
+        /* step2. print error info */
+        println!("{}: {}", "invalid words!", msg);
+        println!(
+            " {} {}:{}:{}",
+            "---->",
+            self.source,
+            self.line_no,
+            self.current - thisline + 1
+        );
+        println!("  {}  ", "|");
+        println!(" {:3}{} {}", self.line_no.to_string(), "|", error_info);
+        /* step3. give suggestion on correct*/
+        print!("    {}", "|");
+        for _ in 0..self.current - thisline + 1 {
+            print!("{}", ' ');
+        }
+        println!("{} {}", "^", suggest);
+        println!("      {}", "|");
+        self.current += 1;
+        self.is_panicked = true;
+    }
 
     fn scan(
         &mut self,
