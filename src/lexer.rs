@@ -272,10 +272,10 @@ impl Lexer {
         }
         let error_info: String = self.chars[thisline..thisline + len].iter().collect();
         /* step2. print error info */
-        println!("{}: {}", "invalid words!", msg);
+        println!("{}: {}", "lexical analysis error", msg);
         println!(
-            " {} {}:{}:{}",
-            "---->",
+            "{} file:{}, line:{}, column:{}.",
+            "Error location ---->",
             self.source,
             self.line_no,
             self.current - thisline + 1
@@ -284,11 +284,13 @@ impl Lexer {
         println!(" {:3}{} {}", self.line_no.to_string(), "|", error_info);
         /* step3. give suggestion on correct*/
         print!("    {}", "|");
+        // 获取错误字符的具体位置, 在前面填充若干个空格
         for _ in 0..self.current - thisline + 1 {
             print!("{}", ' ');
         }
+        // 指出错误字符具体位置, 并打印出修正意见
         println!("{} {}", "^", suggest);
-        println!("      {}", "|");
+        println!("  {}", "|");
         self.current += 1;
         self.is_panicked = true;
     }
@@ -339,6 +341,8 @@ impl Lexer {
                         self.current += 1;
                         t.endpos = self.current;
                         self.tokens.push(t);
+                    } else {
+                        self.error("invalid character!", "check if it is a ASCII character");
                     }
                 }
             }
