@@ -7,7 +7,7 @@ use std::rc::Rc;
 
 enum CharType {
     Spacebar,    // ' ','\'t'
-    Linefeed,    // '\n'
+    Linefeed,    // '\n (LF), todo:support \r \n (CRLF)'
     Alphabet,    // 'a-z''A-Z'
     Digit,       // '0-9'
     Other(char), // 表示在一个"特殊"字符char,特殊字符在于它既不是数字也不是字母.
@@ -40,8 +40,8 @@ impl std::fmt::Debug for Token {
             "Token{{\n\ttype:{:?}\n\tcontent: {} \n\tstart:{}\n\tend:{}\n\tlineno:{}\n}}",
             self.sort,
             content,
-            self.startpos - *self.line_start,
-            self.endpos - *self.line_start,
+            self.startpos - *self.line_start, //开始列号.
+            self.endpos - *self.line_start,   //结束列号.
             self.line_no
         )
         /*
@@ -61,6 +61,7 @@ impl Token {
         startpos: usize,
         endpos: usize,
     ) -> Self {
+        let _ = endpos;
         Token {
             sort,
             buf,
@@ -99,7 +100,7 @@ impl Lexer {
             chars: Rc::new(Self::get_source(&path)),
             current: 0,
             line_starts: vec![0],
-            line_no: 0,
+            line_no: 1,
             tokens: vec![], //用于存放解析好的token。
             source: path,
             is_panicked: false,
@@ -111,7 +112,7 @@ impl Lexer {
             sort,
             self.chars.clone(),
             self.source.clone(),
-            Rc::new(self.line_starts[self.line_no]),
+            Rc::new(self.line_starts[self.line_no - 1]), //行号从1开始,列号从0开始,我说的.
             self.line_no,
             self.current,
             0,
@@ -204,11 +205,45 @@ impl Lexer {
         self.tokens.push(t); //把识别到的token加入tokens中, 这就是词法分析的根本目的嘛！
     }
 
-    /*
-        fn line_comment() {}
+    fn line_comment(&mut self) {
+        while self.chars.get(self.current) != Some(&'\n') {
+            self.current += 1;
+        }
+    }
 
-        fn block_comment() {}
-    */
+    /*
+    块注释的处理思路, 首先,因为是预读识别出/*来的, 所以要更新current指针,
+    然后用while循环从字符流chars中源源不断地拿到单个字符进行解析, 分三种情况,
+        1. 读到*字符, 预读下一个是不是/, 如果是则注释结束, 更新current指针返回
+        2. 读到\n字符, 则要更新行号, 而且每次行号更新后还要刷新每行的起始列号(要考虑缩进的问题)
+        3. 两者都不是, 则忽略所读的内容, current指针向前加1即可
+    如果循环结束了, 都没有返回, 说明根本没读到*/这个结束的标注, 则报错.
+     */
+    fn block_comment(&mut self) {
+        self.current += 2;
+        while let Some(&c) = self.chars.get(self.current) {
+            if c == '*' {
+                if let Some(&judge) = self.chars.get(self.current + 1) {
+                    if judge == '/' {
+                        self.current += 2;
+                        return;
+                    }
+                }
+            }
+            if c == '\n' {
+                self.line_no += 1;
+                self.line_starts.push(self.current + 1);
+            }
+            self.current += 1; // '\n'和其它单个字符在这里一起+1了.
+        }
+        self.error(
+            "block comment not end",
+            "maybe you can close the comment by adding */ ?",
+        );
+    }
+
+    fn error(&mut self, msg: &str, suggest: &str) {}
+
     fn scan(
         &mut self,
         keywords: &HashMap<String, TokenType>,
@@ -228,10 +263,8 @@ impl Lexer {
                 CharType::Alphabet => self.scan_identifier(keywords),
 
                 CharType::Other('/') => match self.chars.get(self.current + 1) {
-                    /*
-                    Some('/') => self.lineComment(),
-                    Some('*') => self.blockComment(),
-                    */
+                    Some('/') => self.line_comment(),
+                    Some('*') => self.block_comment(),
                     _ => {
                         let mut t = self.new_token(TokenType::Divide);
                         self.current += 1;
