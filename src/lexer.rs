@@ -111,7 +111,7 @@ impl Lexer {
             sort,
             self.chars.clone(),
             self.source.clone(),
-            Rc::new(self.line_starts[self.line_no - 1]),
+            Rc::new(self.line_starts[self.line_no]),
             self.line_no,
             self.current,
             0,
@@ -193,8 +193,8 @@ impl Lexer {
             .collect();
         let mut t: Token;
         //对name进行判断,先去关键字表中找,找到了就是关键字,否则就是标识符。
-        if let Some(ttype) = keywords.get(&name) {
-            t = self.new_token(ttype.clone())
+        if let Some(sort) = keywords.get(&name) {
+            t = self.new_token(sort.clone())
         } else {
             t = self.new_token(TokenType::Identifier(name)) //如果是标识符,则把它的token类型设置为Ident.
         }
@@ -239,6 +239,7 @@ impl Lexer {
                         self.tokens.push(t);
                     }
                 },
+
                 CharType::Other(_) => {
                     if let Some(operator) = self.chars.get(self.current..self.current + 2) {
                         let operation_unit: String = operator.iter().collect();
