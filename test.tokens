@@ -120,89 +120,33 @@ Token{
 }
 TokenNo:15
 Token{
-	type:Int
-	content: int 
-	line:4
-	startColumn:4
-	endColumn:7
-}
-TokenNo:16
-Token{
-	type:Identifier("c")
-	content: c 
-	line:4
-	startColumn:8
-	endColumn:9
-}
-TokenNo:17
-Token{
-	type:Assign
-	content: = 
-	line:4
-	startColumn:10
-	endColumn:11
-}
-TokenNo:18
-Token{
-	type:Identifier("a")
-	content: a 
-	line:4
-	startColumn:12
-	endColumn:13
-}
-TokenNo:19
-Token{
-	type:Plus
-	content: + 
-	line:4
-	startColumn:14
-	endColumn:15
-}
-TokenNo:20
-Token{
-	type:Identifier("b")
-	content: b 
-	line:4
-	startColumn:16
-	endColumn:17
-}
-TokenNo:21
-Token{
-	type:Not
-	content: ! 
-	line:4
-	startColumn:17
-	endColumn:18
-}
-TokenNo:22
-Token{
 	type:Return
 	content: return 
-	line:5
+	line:4
 	startColumn:4
 	endColumn:10
 }
-TokenNo:23
+TokenNo:16
 Token{
 	type:IntNumber(0)
 	content: 0 
-	line:5
+	line:4
 	startColumn:11
 	endColumn:12
 }
-TokenNo:24
+TokenNo:17
 Token{
 	type:Semicolon
 	content: ; 
-	line:5
+	line:4
 	startColumn:12
 	endColumn:13
 }
-TokenNo:25
+TokenNo:18
 Token{
 	type:RightBrace
 	content: } 
-	line:6
+	line:5
 	startColumn:0
 	endColumn:1
 }

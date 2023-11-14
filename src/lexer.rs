@@ -158,7 +158,7 @@ impl Lexer {
                 self.current += 2;
                 self.parse_number(16);
             }
-            //若是以0与任何一个字符开头, 则说明是八进制数.
+            //若是以0开头,则说明是八进制数(参考C语言的规范).
             Some(&['0', _]) => {
                 self.parse_number(8);
             }
@@ -194,6 +194,7 @@ impl Lexer {
         tips: 不顾按时标识符还是关键字, 识别好了都得new一个token出来把它们信息装好后推入tokens.
     */
     fn scan_identifier(&mut self, keywords: &HashMap<String, TokenType>) {
+        //step1.
         let mut len = 1;
         while let Some(c) = self.chars.get(self.current + len) {
             //读取一个字符到变量c, 然后对c进行判断, 如果是标识符三要素: 字母, 数字, 下划线则继续
@@ -203,19 +204,18 @@ impl Lexer {
                 break;
             }
         }
-        //至此, len为标识符的长度, self.pos -> self.pos+len-1, [self.pos, self.pos+len) 即为标识符的起止位置.
-        //name就是当前识别出来的标识符或者关键字, 二者之一, 需要进一步判断.
         let name: String = self.chars[self.current..self.current + len]
             .iter()
             .collect();
+        //step2.
         let mut t: Token;
-        //对name进行判断,先去关键字表中找,找到了就是关键字,否则就是标识符。
         if let Some(sort) = keywords.get(&name) {
             t = self.new_token(sort.clone())
         } else {
-            t = self.new_token(TokenType::Identifier(name)) //如果是标识符,则把它的token类型设置为Ident.
+            //step3.
+            t = self.new_token(TokenType::Identifier(name))
         }
-        //到这一步,识别关键字/标识符的任务已经完成,更新pos即可.
+        //add to tokens.
         self.current += len;
         t.endpos = self.current; //更新当前Token的end字段位置
         self.tokens.push(t); //把识别到的token加入tokens中, 这就是词法分析的根本目的嘛！
@@ -378,6 +378,8 @@ impl Lexer {
     }
 }
 
+/*-----------Library function----------------*/
+
 /* tokenize: use Lexer to tokenize the source(stored in path), charStreams -> Tokens */
 pub fn tokenize(path: String) -> Vec<Token> {
     /*
@@ -394,6 +396,8 @@ pub fn tokenize(path: String) -> Vec<Token> {
     }
     lexer.tokens
 }
+
+/*-------------tools function-------------------*/
 
 /* 关键字表 */
 fn keyword_table_init() -> HashMap<String, TokenType> {
