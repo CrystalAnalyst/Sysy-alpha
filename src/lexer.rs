@@ -128,8 +128,8 @@ impl Lexer {
     fn get_source(path: &str) -> Vec<char> {
         let mut content = String::new();
         /*
-            expect用于错误处理, Rust中没有Java/Cpp中Try-Catch的结构,
-            用expect来表明错误, 如果有错, 则会输出expect括号中的内容, 没错则会无视。
+            type_check用于错误处理, Rust中没有Java/Cpp中Try-Catch的结构,
+            用type_check来表明错误, 如果有错, 则会输出type_check括号中的内容, 没错则会无视。
         */
         let mut file = File::open(path).expect("File cannot be opened");
         file.read_to_string(&mut content)
