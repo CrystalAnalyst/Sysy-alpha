@@ -1,0 +1,11 @@
+|Func main,returns Void
+|--Block
+|----DeclStmt
+|------Declare of a(Int) in Local scope
+|--------Number 10
+|----DeclStmt
+|------Declare of b(Int) in Local scope
+|--------Number 2
+|----DeclStmt
+|------Declare of c(Int) in Local scope
+|--------Number 3

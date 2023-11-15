@@ -1,42 +1,42 @@
 TokenNo:0
 Token{
-	type:Int
-	content: int 
+	type:Void
+	content: void 
 	line:1
 	startColumn:0
-	endColumn:3
+	endColumn:4
 }
 TokenNo:1
 Token{
 	type:Identifier("main")
 	content: main 
 	line:1
-	startColumn:4
-	endColumn:8
+	startColumn:5
+	endColumn:9
 }
 TokenNo:2
 Token{
 	type:LeftParen
 	content: ( 
 	line:1
-	startColumn:8
-	endColumn:9
+	startColumn:9
+	endColumn:10
 }
 TokenNo:3
 Token{
 	type:RightParen
 	content: ) 
 	line:1
-	startColumn:9
-	endColumn:10
+	startColumn:10
+	endColumn:11
 }
 TokenNo:4
 Token{
 	type:LeftBrace
 	content: { 
 	line:1
-	startColumn:11
-	endColumn:12
+	startColumn:12
+	endColumn:13
 }
 TokenNo:5
 Token{
@@ -160,33 +160,9 @@ Token{
 }
 TokenNo:20
 Token{
-	type:Return
-	content: return 
-	line:5
-	startColumn:4
-	endColumn:10
-}
-TokenNo:21
-Token{
-	type:IntNumber(0)
-	content: 0 
-	line:5
-	startColumn:11
-	endColumn:12
-}
-TokenNo:22
-Token{
-	type:Semicolon
-	content: ; 
-	line:5
-	startColumn:12
-	endColumn:13
-}
-TokenNo:23
-Token{
 	type:RightBrace
 	content: } 
-	line:6
+	line:5
 	startColumn:0
 	endColumn:1
 }
