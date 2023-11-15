@@ -39,12 +39,14 @@ impl std::fmt::Debug for Token {
         //write token to stdout Stream.
         write!(
             f,
-            "Token{{\n\ttype:{:?}\n\tcontent: {} \n\tline:{}\n\tstartColumn:{}\n\tendColumn:{}\n}}",
+            "Token{{\tline:{:?}\t<type:{:?}\tvalue:{:?}>\t}}",
+            self.line_no,
             self.sort,
             content,
-            self.line_no,
-            self.startpos - *self.line_start, //开始列号.
-            self.endpos - *self.line_start    //结束列号.
+            /*
+                self.startpos - *self.line_start, //开始列号.
+                self.endpos - *self.line_start    //结束列号.
+            */
         )
         /*
             返回一个Result, 这个Result是什么? 它是一个枚举类型, 它有两个值, Ok和Err.
@@ -161,10 +163,10 @@ impl Lexer {
         }
         self.current = setoff;
         if cur == Some(&'.') {
-            println!("find the float number!");
+            //println!("find the float number!");
             self.parse_float();
         } else {
-            println!("find the integer number!");
+            //println!("find the integer number!");
             self.scan_number();
         }
     }
@@ -316,7 +318,7 @@ impl Lexer {
         }
         let error_info: String = self.chars[thisline..thisline + len].iter().collect();
         /* step2. print error info */
-        println!("{}: {}", "lexical analysis error", msg);
+        println!("{}: {}", "Lexical analysis error", msg);
         println!(
             "{} file:{}, line:{}, column:{}.",
             "Error location ---->",

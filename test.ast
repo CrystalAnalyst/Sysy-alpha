@@ -1,5 +1,5 @@
 |DeclStmt
-|--Declare of Monday(Int) in Global scope
+|--Declare of monday(Int) in Global scope
 |----Number 1
 |DeclStmt
 |--Declare of Tuesday(Const) in Global scope
@@ -22,6 +22,22 @@
 |--------Number 8
 |--------Number 9
 |----DeclStmt
+|------Declare of metrix(Int) in Local scope
+|--------Number 3
+|--------Number 3
+|--------Initlist
+|----------Number 1
+|----------Number 2
+|----------Number 3
+|--------Initlist
+|----------Number 4
+|----------Number 5
+|----------Number 6
+|--------Initlist
+|----------Number 7
+|----------Number 8
+|----------Number 9
+|----DeclStmt
 |------Declare of a(Int) in Local scope
 |--------Number 10
 |----DeclStmt
@@ -30,5 +46,19 @@
 |----DeclStmt
 |------Declare of c(Int) in Local scope
 |--------Number 3
+|----DeclStmt
+|------Declare of d(Int) in Local scope
+|--------Function call add
+|----------Binop Plus
+|------------Access a
+|------------Access b
 |----Return
 |------Number 0
+|Func add,returns Int
+|--Declare of a(Int) in Params scope
+|--Declare of b(Int) in Params scope
+|--Block
+|----Return
+|------Binop Plus
+|--------Access a
+|--------Access b
