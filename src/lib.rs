@@ -113,6 +113,8 @@ pub enum NodeType {
     // Name, [index], Exp, lhs_exp.
     // eg: a[1] = 10; 在此之前, a[1] = 0(lhs_exp);
     Assign(String, Option<Vec<Node>>, Box<Node>, Box<Node>),
+    // 表达式语句, 一个表达式后跟一个';'
+    ExprStmt(Box<Node>),
     // ArrayName, [index], Exp(二维数组按行取可以取出一行元素,Exp在这里就代表多维数组中按某一维度进行访问).
     Aceess(String, Option<Vec<Node>>, Box<Node>),
     // BinaryOperator, lhs, rhs.
@@ -128,7 +130,7 @@ pub enum NodeType {
     /* 结构-循环类 */
     If(Box<Node>, Box<Node>, Option<Box<Node>>),
     While(Box<Node>, Box<Node>),
-    Conitnue,
+    Continue,
     Break,
 
     /* 结点值类 */

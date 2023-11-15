@@ -45,12 +45,12 @@ pub struct Parser {
 }
 
 impl Parser {
-    /*------------构造函数-------------*/
+    /*------------------构造函数------------------*/
     fn new(tokens: Vec<Token>) -> Self {
         Parser { tokens, current: 0 }
     }
 
-    /*------------辅助函数-------------*/
+    /*------------------辅助函数-------------------*/
     fn get_current_token(&self) -> Token {
         self.tokens[self.current].clone()
     }
@@ -142,7 +142,7 @@ impl Parser {
         }
     }
 
-    /*--------------语句类---------------------- */
+    /*----------------语句类---------------------- */
     fn decl_stmt(&mut self, scope: Scope) -> Node {
         let startpos = self.get_startpos();
         let t = self.get_current_token();
@@ -249,9 +249,8 @@ impl Parser {
         init
     }
 
-    //Statements
     fn stmt(&mut self) -> Node {
-        /* 这个函数是一切问题的答案, 一切智慧的总和。 ——《教父》 */
+        /* 这个函数是一切问题的答案, 一切智慧的总和。 */
         let startpos = self.get_startpos();
         let t = self.get_current_token();
         self.current += 1;
@@ -259,7 +258,7 @@ impl Parser {
             TokenType::Identifier(id) => {
                 let pos = self.current;
                 let index = self.seek_array(false);
-                // Token是标识符, 后面还跟着一个=号, 你说这是啥？赋值语句!
+                // Token是标识符, 后面还跟着一个=号, 一眼赋值语句。
                 if self.type_judge(TokenType::Assign) {
                     let exp = self.add_exp(false);
                     self.type_check(TokenType::Semicolon);
@@ -277,7 +276,7 @@ impl Parser {
                     let exp = self.add_exp(false);
                     self.type_check(TokenType::Semicolon);
                     let endpos = self.get_endpos();
-                    Node::new(NodeType::expStmt(Box::new(exp))).bound(startpos, endpos)
+                    Node::new(NodeType::ExprStmt(Box::new(exp))).bound(startpos, endpos)
                 }
             }
             TokenType::Int | TokenType::Const => {
@@ -319,7 +318,7 @@ impl Parser {
             TokenType::Continue => {
                 self.type_check(TokenType::Semicolon);
                 let endpos = self.get_endpos();
-                Node::new(NodeType::Conitnue).bound(startpos, endpos)
+                Node::new(NodeType::Continue).bound(startpos, endpos)
             }
             TokenType::Return => {
                 let ret: Option<Box<Node>>;
@@ -336,12 +335,41 @@ impl Parser {
                 let exp = self.add_exp(false);
                 self.type_check(TokenType::Semicolon);
                 let endpos = self.get_endpos();
-                Node::new(NodeType::expStmt(Box::new(exp))).bound(startpos, endpos)
+                Node::new(NodeType::ExprStmt(Box::new(exp))).bound(startpos, endpos)
             }
         }
     }
 
-    /*---------------表达式类--------------- */
+    /*---------------函数类-----------------------*/
+
+    fn param(&mut self) -> Node {
+        let startpos = self.get_startpos();
+        self.type_check(TokenType::Int);
+        let name = self.get_identifier();
+        let dim = self.seek_array(true);
+        let btype: BasicType;
+        if dim.is_none() {
+            btype = BasicType::Int;
+        } else {
+            btype = BasicType::IntArray(vec![0]);
+        }
+        let endpos = self.get_endpos();
+        Node::new(NodeType::Decl(btype, name, dim, None, Scope::Params)).bound(startpos, endpos)
+    }
+
+    fn block(&mut self) -> Node {
+        let startpos = self.get_startpos();
+        let mut stmts = vec![];
+        self.type_check(TokenType::LeftBrace);
+        while !self.type_judge(TokenType::RightBrace) {
+            stmts.push(self.stmt());
+        }
+        let endpos = self.get_endpos();
+        Node::new(NodeType::Block(stmts)).bound(startpos, endpos)
+    }
+
+    /*-----------------表达式类----------------- */
+
     /* primary_exp: 基本表达式
      *    - Ident
      *    - Number
@@ -609,9 +637,7 @@ impl Parser {
         }
     }
 
-    /*
     fn comp_unit(&mut self) -> Node {
-
         /* 初始化变量:获取当前token的索引, 起始位置, 基本类型, 变量名 */
         let index = self.current;
         let startpos = self.get_startpos();
@@ -622,32 +648,21 @@ impl Parser {
         if self.type_judge(TokenType::LeftParen) {
             let mut params = vec![];
             if !self.type_judge(TokenType::RightParen) {
-                params.push(self.func_f_param());
+                params.push(self.param());
                 while self.type_judge(TokenType::Comma) {
-                    params.push(self.func_f_param());
+                    params.push(self.param());
                 }
                 self.type_check(TokenType::RightParen);
             }
             let body = self.block();
             let endpos = self.get_endpos();
-            return Node::new(NodeType::Func(basic_type, name, args, Box::new(body)))
+            return Node::new(NodeType::FuncDef(basic_type, name, params, Box::new(body)))
                 .bound(startpos, endpos);
         }
 
-        self.current = pos;
+        self.current = index;
         self.decl_stmt(Scope::Global)
     }
-    */
-}
-
-pub fn parse(tokens: Vec<Token>) -> Vec<Node> {
-    let mut ast_nodes = vec![];
-    let len = tokens.len();
-    let mut parser = Parser::new(tokens);
-    while parser.current != len {
-        ast_nodes.push(parser.comp_unit());
-    }
-    ast_nodes
 }
 
 impl Token {
@@ -691,4 +706,15 @@ impl Token {
         println!("   {}", "|");
         panic!("Untype_checked token");
     }
+}
+
+/*----------------对外提供的库函数------------------*/
+pub fn parse(tokens: Vec<Token>) -> Vec<Node> {
+    let mut ast_nodes = vec![];
+    let len = tokens.len();
+    let mut parser = Parser::new(tokens);
+    while parser.current != len {
+        ast_nodes.push(parser.comp_unit());
+    }
+    ast_nodes
 }
