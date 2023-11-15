@@ -21,6 +21,17 @@ impl Node {
             endpos: 0,
         }
     }
+    fn zero_init() -> Self {
+        Node::new(NodeType::Number(0))
+    }
+    fn bound(mut self, start: usize, end: usize) -> Self {
+        self.startpos = start;
+        self.endpos = end;
+        self
+    }
+    fn binary_operation(sort: TokenType, lhs: Node, rhs: Node) -> Self {
+        Node::new(NodeType::BinOp(sort, Box::new(lhs), Box::new(rhs)))
+    }
 }
 
 pub struct Parser {
