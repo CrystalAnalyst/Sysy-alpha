@@ -84,7 +84,7 @@ impl Parser {
     /*------------语法分析:核心函数列表-------------*/
 
     /*-----------------变量类---------------------*/
-    fn get_basic_type(&self) -> BasicType {
+    fn get_basic_type(&mut self) -> BasicType {
         let t = self.get_current_token();
         self.current += 1;
         let result = match t.sort {
@@ -147,7 +147,7 @@ impl Parser {
         let startpos = self.get_startpos();
         let t = self.get_current_token();
         self.current += 1;
-        let btype = match t.sort {
+        let basic_type = match t.sort {
             TokenType::Const => {
                 self.type_check(TokenType::Int);
                 Some(BasicType::Const)
@@ -190,7 +190,7 @@ impl Parser {
                     //init_val()用于初始化数组
                     init = Some(self.init_list());
                 }
-            } else if btype == BasicType::Const {
+            } else if basic_type == BasicType::Const {
                 self.get_current_token()
                     .wrong_token("assign in const declaration".into());
                 unreachable!();
@@ -201,7 +201,7 @@ impl Parser {
             /* 声明节点 */
             decl_list.push(
                 Node::new(NodeType::Decl(
-                    btype.clone(),
+                    basic_type.clone(),
                     name,
                     dims,
                     init,
@@ -347,14 +347,15 @@ impl Parser {
         self.type_check(TokenType::Int);
         let name = self.get_identifier();
         let dim = self.seek_array(true);
-        let btype: BasicType;
+        let basic_type: BasicType;
         if dim.is_none() {
-            btype = BasicType::Int;
+            basic_type = BasicType::Int;
         } else {
-            btype = BasicType::IntArray(vec![0]);
+            basic_type = BasicType::IntArray(vec![0]);
         }
         let endpos = self.get_endpos();
-        Node::new(NodeType::Decl(btype, name, dim, None, Scope::Params)).bound(startpos, endpos)
+        Node::new(NodeType::Decl(basic_type, name, dim, None, Scope::Params))
+            .bound(startpos, endpos)
     }
 
     fn block(&mut self) -> Node {

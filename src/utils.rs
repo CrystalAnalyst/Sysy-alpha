@@ -42,7 +42,7 @@ pub fn print_tree(ast: &Vec<Node>, path: &Path, extension: &str, with_type: bool
         */
 
         //递归(dfs)遍历AST树, 并将其写入文件中, 整体的算法流程看下来就是递归下降Recursive Descending.
-        match &node.ntype {
+        match &node.node_type {
             //DeclStmt
             NodeType::DeclStmt(nodes) => {
                 print_len(level, format!("DeclStmt"), output);
@@ -51,7 +51,7 @@ pub fn print_tree(ast: &Vec<Node>, path: &Path, extension: &str, with_type: bool
                 }
             }
             //Func
-            NodeType::Func(ret, name, args, body) => {
+            NodeType::FuncDef(ret, name, args, body) => {
                 print_len(level, format!("Func {},returns {:?}", name, ret), output);
                 //output.write(b"//args\n");
                 for arg in args {
@@ -64,7 +64,7 @@ pub fn print_tree(ast: &Vec<Node>, path: &Path, extension: &str, with_type: bool
             NodeType::Number(num) => {
                 let mut str = format!("Number {}", num);
                 if with_type {
-                    str.push_str(&format!(" with type {:?}", node.btype));
+                    str.push_str(&format!(" with type {:?}", node.basic_type));
                 }
                 print_len(level, str, output);
             }
@@ -72,7 +72,7 @@ pub fn print_tree(ast: &Vec<Node>, path: &Path, extension: &str, with_type: bool
             NodeType::FloatNumber(num) => {
                 let mut str = format!("FloatNumber {}", num);
                 if with_type {
-                    str.push_str(&format!(" with type {:?}", node.btype));
+                    str.push_str(&format!(" with type {:?}", node.basic_type));
                 }
                 print_len(level, str, output);
             }
@@ -84,10 +84,10 @@ pub fn print_tree(ast: &Vec<Node>, path: &Path, extension: &str, with_type: bool
               2. int a[2][5] = { {1,2,3,4,5}, {6,7,8,9,10} };
               3. int f(int x,int y) {return x+y;}
             */
-            NodeType::Declare(btype, name, dims, init, scope) => {
+            NodeType::Decl(basic_type, name, dims, init, scope) => {
                 print_len(
                     level,
-                    format!("Declare of {}({:?}) in {:?} scope", name, btype, scope),
+                    format!("Declare of {}({:?}) in {:?} scope", name, basic_type, scope),
                     output,
                 );
                 //output.write(b"//dims\n");
@@ -111,10 +111,10 @@ pub fn print_tree(ast: &Vec<Node>, path: &Path, extension: &str, with_type: bool
                 }
             }
             //Access
-            NodeType::Access(name, indexes, _) => {
+            NodeType::Aceess(name, indexes, _) => {
                 let mut str = format!("Access {}", name);
                 if with_type {
-                    str.push_str(&format!(" with type {:?}", node.btype));
+                    str.push_str(&format!(" with type {:?}", node.basic_type));
                 }
                 print_len(level, str, output);
                 if let Some(indexeslist) = indexes {
@@ -127,7 +127,7 @@ pub fn print_tree(ast: &Vec<Node>, path: &Path, extension: &str, with_type: bool
             NodeType::BinOp(ttype, lhs, rhs) => {
                 let mut str = format!("Binop {:?}", ttype);
                 if with_type {
-                    str.push_str(&format!(" with type {:?}", node.btype));
+                    str.push_str(&format!(" with type {:?}", node.basic_type));
                 }
                 print_len(level, str, output);
                 //output.write(b"//lhs\n");
@@ -139,7 +139,7 @@ pub fn print_tree(ast: &Vec<Node>, path: &Path, extension: &str, with_type: bool
             NodeType::Call(name, args, _) => {
                 let mut str = format!("Function call {}", name);
                 if with_type {
-                    str.push_str(&format!(" with type {:?}", node.btype));
+                    str.push_str(&format!(" with type {:?}", node.basic_type));
                 }
                 print_len(level, str, output);
                 for arg in args {
