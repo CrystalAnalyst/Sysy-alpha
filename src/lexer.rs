@@ -384,10 +384,10 @@ impl Lexer {
 pub fn tokenize(path: String) -> Vec<Token> {
     /*
        整体的解决步骤：
-       1.找到path指向的文件并打开,
-       2.读取文件中的字符流到buf中,
-       3.调用Lexer的方法把字符流提取成一个个token,
-       4.把token放在可变长度数组("向量")Vec中, 返回.
+       1."tokenize"这个动作的执行者是Lexer, 先New一个Lexer作为执行词法分析的实体.
+       2.调用Lexer的成员函数scan(), 它执行的过程就是词法分析的过程, 把扫描到的一个个词法单元装入lexer.tokens中.
+       3.如果在scan的过程中有错误(在lexer中设置了检查panic的字段),则结束程序.
+       4.没有panic则正常结束, tokens读取完毕, 返回lexer.tokens
     */
     let mut lexer = Lexer::new(Rc::new(path));
     lexer.scan(&&keyword_table_init(), &&double_sign_table_init());

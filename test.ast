@@ -1,5 +1,26 @@
-|Func main,returns Void
+|DeclStmt
+|--Declare of Monday(Int) in Global scope
+|----Number 1
+|DeclStmt
+|--Declare of Tuesday(Const) in Global scope
+|----Number 2
+|Func main,returns Int
 |--Block
+|----DeclStmt
+|------Declare of x(Int) in Local scope
+|--------Number 1
+|------Declare of y(Int) in Local scope
+|--------Number 10
+|--------Number 0
+|--------Number 1
+|--------Number 2
+|--------Number 3
+|--------Number 4
+|--------Number 5
+|--------Number 6
+|--------Number 7
+|--------Number 8
+|--------Number 9
 |----DeclStmt
 |------Declare of a(Int) in Local scope
 |--------Number 10
@@ -9,3 +30,5 @@
 |----DeclStmt
 |------Declare of c(Int) in Local scope
 |--------Number 3
+|----Return
+|------Number 0
