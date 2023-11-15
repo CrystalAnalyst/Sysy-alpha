@@ -8,157 +8,205 @@ Token{
 }
 TokenNo:1
 Token{
-	type:Identifier("Monday")
-	content: Monday 
+	type:Identifier("main")
+	content: main 
 	line:1
 	startColumn:4
-	endColumn:10
+	endColumn:8
 }
 TokenNo:2
 Token{
-	type:Assign
-	content: = 
+	type:LeftParen
+	content: ( 
+	line:1
+	startColumn:8
+	endColumn:9
+}
+TokenNo:3
+Token{
+	type:RightParen
+	content: ) 
+	line:1
+	startColumn:9
+	endColumn:10
+}
+TokenNo:4
+Token{
+	type:LeftBrace
+	content: { 
 	line:1
 	startColumn:11
 	endColumn:12
 }
-TokenNo:3
-Token{
-	type:IntNumber(1)
-	content: 1 
-	line:1
-	startColumn:13
-	endColumn:14
-}
-TokenNo:4
-Token{
-	type:Semicolon
-	content: ; 
-	line:1
-	startColumn:14
-	endColumn:15
-}
 TokenNo:5
 Token{
-	type:Const
-	content: const 
+	type:Float
+	content: float 
 	line:2
-	startColumn:0
-	endColumn:5
+	startColumn:4
+	endColumn:9
 }
 TokenNo:6
 Token{
-	type:Int
-	content: int 
-	line:2
-	startColumn:6
-	endColumn:9
-}
-TokenNo:7
-Token{
-	type:Identifier("Tuesday")
-	content: Tuesday 
+	type:Identifier("pi")
+	content: pi 
 	line:2
 	startColumn:10
-	endColumn:17
+	endColumn:12
 }
-TokenNo:8
+TokenNo:7
 Token{
 	type:Assign
 	content: = 
 	line:2
-	startColumn:18
+	startColumn:13
+	endColumn:14
+}
+TokenNo:8
+Token{
+	type:FloatNumber(3.14)
+	content:  
+	line:2
+	startColumn:19
 	endColumn:19
 }
 TokenNo:9
 Token{
-	type:IntNumber(2)
-	content: 2 
-	line:2
-	startColumn:20
-	endColumn:21
-}
-TokenNo:10
-Token{
 	type:Semicolon
 	content: ; 
 	line:2
-	startColumn:21
-	endColumn:22
+	startColumn:19
+	endColumn:20
 }
-TokenNo:11
+TokenNo:10
 Token{
 	type:Int
 	content: int 
 	line:3
-	startColumn:0
-	endColumn:3
-}
-TokenNo:12
-Token{
-	type:Identifier("main")
-	content: main 
-	line:3
 	startColumn:4
-	endColumn:8
+	endColumn:7
 }
-TokenNo:13
+TokenNo:11
 Token{
-	type:LeftParen
-	content: ( 
+	type:Identifier("x")
+	content: x 
 	line:3
 	startColumn:8
 	endColumn:9
 }
+TokenNo:12
+Token{
+	type:Assign
+	content: = 
+	line:3
+	startColumn:10
+	endColumn:11
+}
+TokenNo:13
+Token{
+	type:IntNumber(1)
+	content: 1 
+	line:3
+	startColumn:12
+	endColumn:13
+}
 TokenNo:14
 Token{
-	type:RightParen
-	content: ) 
+	type:Comma
+	content: , 
 	line:3
-	startColumn:9
-	endColumn:10
+	startColumn:13
+	endColumn:14
 }
 TokenNo:15
+Token{
+	type:Identifier("y")
+	content: y 
+	line:3
+	startColumn:15
+	endColumn:16
+}
+TokenNo:16
+Token{
+	type:LeftBracket
+	content: [ 
+	line:3
+	startColumn:16
+	endColumn:17
+}
+TokenNo:17
+Token{
+	type:IntNumber(10)
+	content: 10 
+	line:3
+	startColumn:17
+	endColumn:19
+}
+TokenNo:18
+Token{
+	type:RightBracket
+	content: ] 
+	line:3
+	startColumn:19
+	endColumn:20
+}
+TokenNo:19
+Token{
+	type:Assign
+	content: = 
+	line:3
+	startColumn:21
+	endColumn:22
+}
+TokenNo:20
 Token{
 	type:LeftBrace
 	content: { 
 	line:3
-	startColumn:11
-	endColumn:12
+	startColumn:23
+	endColumn:24
 }
-TokenNo:16
+TokenNo:21
 Token{
-	type:Int
-	content: int 
-	line:4
-	startColumn:4
-	endColumn:7
-}
-TokenNo:17
-Token{
-	type:Identifier("x")
-	content: x 
+	type:IntNumber(0)
+	content: 0 
 	line:4
 	startColumn:8
 	endColumn:9
 }
-TokenNo:18
+TokenNo:22
 Token{
-	type:Assign
-	content: = 
+	type:Comma
+	content: , 
 	line:4
-	startColumn:10
-	endColumn:11
+	startColumn:9
+	endColumn:10
 }
-TokenNo:19
+TokenNo:23
 Token{
 	type:IntNumber(1)
 	content: 1 
 	line:4
+	startColumn:10
+	endColumn:11
+}
+TokenNo:24
+Token{
+	type:Comma
+	content: , 
+	line:4
+	startColumn:11
+	endColumn:12
+}
+TokenNo:25
+Token{
+	type:IntNumber(2)
+	content: 2 
+	line:4
 	startColumn:12
 	endColumn:13
 }
-TokenNo:20
+TokenNo:26
 Token{
 	type:Comma
 	content: , 
@@ -166,371 +214,275 @@ Token{
 	startColumn:13
 	endColumn:14
 }
-TokenNo:21
-Token{
-	type:Identifier("y")
-	content: y 
-	line:4
-	startColumn:15
-	endColumn:16
-}
-TokenNo:22
-Token{
-	type:LeftBracket
-	content: [ 
-	line:4
-	startColumn:16
-	endColumn:17
-}
-TokenNo:23
-Token{
-	type:IntNumber(10)
-	content: 10 
-	line:4
-	startColumn:17
-	endColumn:19
-}
-TokenNo:24
-Token{
-	type:RightBracket
-	content: ] 
-	line:4
-	startColumn:19
-	endColumn:20
-}
-TokenNo:25
-Token{
-	type:Assign
-	content: = 
-	line:4
-	startColumn:21
-	endColumn:22
-}
-TokenNo:26
-Token{
-	type:LeftBrace
-	content: { 
-	line:4
-	startColumn:23
-	endColumn:24
-}
 TokenNo:27
 Token{
-	type:IntNumber(0)
-	content: 0 
-	line:5
-	startColumn:8
-	endColumn:9
+	type:IntNumber(3)
+	content: 3 
+	line:4
+	startColumn:14
+	endColumn:15
 }
 TokenNo:28
 Token{
 	type:Comma
 	content: , 
-	line:5
-	startColumn:9
-	endColumn:10
+	line:4
+	startColumn:15
+	endColumn:16
 }
 TokenNo:29
 Token{
-	type:IntNumber(1)
-	content: 1 
-	line:5
-	startColumn:10
-	endColumn:11
+	type:IntNumber(4)
+	content: 4 
+	line:4
+	startColumn:16
+	endColumn:17
 }
 TokenNo:30
 Token{
 	type:Comma
 	content: , 
-	line:5
-	startColumn:11
-	endColumn:12
+	line:4
+	startColumn:17
+	endColumn:18
 }
 TokenNo:31
 Token{
-	type:IntNumber(2)
-	content: 2 
-	line:5
-	startColumn:12
-	endColumn:13
+	type:IntNumber(5)
+	content: 5 
+	line:4
+	startColumn:18
+	endColumn:19
 }
 TokenNo:32
 Token{
 	type:Comma
 	content: , 
-	line:5
-	startColumn:13
-	endColumn:14
+	line:4
+	startColumn:19
+	endColumn:20
 }
 TokenNo:33
 Token{
-	type:IntNumber(3)
-	content: 3 
-	line:5
-	startColumn:14
-	endColumn:15
+	type:IntNumber(6)
+	content: 6 
+	line:4
+	startColumn:20
+	endColumn:21
 }
 TokenNo:34
 Token{
 	type:Comma
 	content: , 
-	line:5
-	startColumn:15
-	endColumn:16
+	line:4
+	startColumn:21
+	endColumn:22
 }
 TokenNo:35
 Token{
-	type:IntNumber(4)
-	content: 4 
-	line:5
-	startColumn:16
-	endColumn:17
+	type:IntNumber(7)
+	content: 7 
+	line:4
+	startColumn:22
+	endColumn:23
 }
 TokenNo:36
 Token{
 	type:Comma
 	content: , 
-	line:5
-	startColumn:17
-	endColumn:18
+	line:4
+	startColumn:23
+	endColumn:24
 }
 TokenNo:37
 Token{
-	type:IntNumber(5)
-	content: 5 
-	line:5
-	startColumn:18
-	endColumn:19
+	type:IntNumber(8)
+	content: 8 
+	line:4
+	startColumn:24
+	endColumn:25
 }
 TokenNo:38
 Token{
 	type:Comma
 	content: , 
-	line:5
-	startColumn:19
-	endColumn:20
-}
-TokenNo:39
-Token{
-	type:IntNumber(6)
-	content: 6 
-	line:5
-	startColumn:20
-	endColumn:21
-}
-TokenNo:40
-Token{
-	type:Comma
-	content: , 
-	line:5
-	startColumn:21
-	endColumn:22
-}
-TokenNo:41
-Token{
-	type:IntNumber(7)
-	content: 7 
-	line:5
-	startColumn:22
-	endColumn:23
-}
-TokenNo:42
-Token{
-	type:Comma
-	content: , 
-	line:5
-	startColumn:23
-	endColumn:24
-}
-TokenNo:43
-Token{
-	type:IntNumber(8)
-	content: 8 
-	line:5
-	startColumn:24
-	endColumn:25
-}
-TokenNo:44
-Token{
-	type:Comma
-	content: , 
-	line:5
+	line:4
 	startColumn:25
 	endColumn:26
 }
-TokenNo:45
+TokenNo:39
 Token{
 	type:IntNumber(9)
 	content: 9 
-	line:5
+	line:4
 	startColumn:26
 	endColumn:27
 }
-TokenNo:46
+TokenNo:40
 Token{
 	type:RightBrace
 	content: } 
-	line:6
+	line:5
 	startColumn:4
 	endColumn:5
 }
-TokenNo:47
+TokenNo:41
+Token{
+	type:Semicolon
+	content: ; 
+	line:5
+	startColumn:5
+	endColumn:6
+}
+TokenNo:42
+Token{
+	type:Int
+	content: int 
+	line:6
+	startColumn:4
+	endColumn:7
+}
+TokenNo:43
+Token{
+	type:Identifier("a")
+	content: a 
+	line:6
+	startColumn:8
+	endColumn:9
+}
+TokenNo:44
+Token{
+	type:Assign
+	content: = 
+	line:6
+	startColumn:10
+	endColumn:11
+}
+TokenNo:45
+Token{
+	type:IntNumber(10)
+	content: A 
+	line:6
+	startColumn:14
+	endColumn:15
+}
+TokenNo:46
 Token{
 	type:Semicolon
 	content: ; 
 	line:6
-	startColumn:5
-	endColumn:6
+	startColumn:15
+	endColumn:16
 }
-TokenNo:48
+TokenNo:47
 Token{
 	type:Int
 	content: int 
-	line:8
+	line:7
 	startColumn:4
 	endColumn:7
 }
-TokenNo:49
+TokenNo:48
 Token{
-	type:Identifier("a")
-	content: a 
-	line:8
+	type:Identifier("b")
+	content: b 
+	line:7
 	startColumn:8
 	endColumn:9
 }
-TokenNo:50
+TokenNo:49
 Token{
 	type:Assign
 	content: = 
-	line:8
+	line:7
 	startColumn:10
 	endColumn:11
 }
+TokenNo:50
+Token{
+	type:IntNumber(2)
+	content: 02 
+	line:7
+	startColumn:12
+	endColumn:14
+}
 TokenNo:51
 Token{
-	type:IntNumber(10)
-	content: A 
-	line:8
+	type:Semicolon
+	content: ; 
+	line:7
 	startColumn:14
 	endColumn:15
 }
 TokenNo:52
 Token{
-	type:Semicolon
-	content: ; 
-	line:8
-	startColumn:15
-	endColumn:16
-}
-TokenNo:53
-Token{
 	type:Int
 	content: int 
-	line:9
+	line:8
 	startColumn:4
 	endColumn:7
 }
-TokenNo:54
+TokenNo:53
 Token{
-	type:Identifier("b")
-	content: b 
-	line:9
+	type:Identifier("c")
+	content: c 
+	line:8
 	startColumn:8
 	endColumn:9
 }
-TokenNo:55
+TokenNo:54
 Token{
 	type:Assign
 	content: = 
-	line:9
+	line:8
 	startColumn:10
 	endColumn:11
 }
+TokenNo:55
+Token{
+	type:IntNumber(3)
+	content: 3 
+	line:8
+	startColumn:12
+	endColumn:13
+}
 TokenNo:56
 Token{
-	type:IntNumber(2)
-	content: 02 
-	line:9
-	startColumn:12
+	type:Semicolon
+	content: ; 
+	line:8
+	startColumn:13
 	endColumn:14
 }
 TokenNo:57
 Token{
-	type:Semicolon
-	content: ; 
-	line:9
-	startColumn:14
-	endColumn:15
-}
-TokenNo:58
-Token{
-	type:Int
-	content: int 
-	line:10
-	startColumn:4
-	endColumn:7
-}
-TokenNo:59
-Token{
-	type:Identifier("c")
-	content: c 
-	line:10
-	startColumn:8
-	endColumn:9
-}
-TokenNo:60
-Token{
-	type:Assign
-	content: = 
-	line:10
-	startColumn:10
-	endColumn:11
-}
-TokenNo:61
-Token{
-	type:IntNumber(3)
-	content: 3 
-	line:10
-	startColumn:12
-	endColumn:13
-}
-TokenNo:62
-Token{
-	type:Semicolon
-	content: ; 
-	line:10
-	startColumn:13
-	endColumn:14
-}
-TokenNo:63
-Token{
 	type:Return
 	content: return 
-	line:11
+	line:9
 	startColumn:4
 	endColumn:10
 }
-TokenNo:64
+TokenNo:58
 Token{
 	type:IntNumber(0)
 	content: 0 
-	line:11
+	line:9
 	startColumn:11
 	endColumn:12
 }
-TokenNo:65
+TokenNo:59
 Token{
 	type:Semicolon
 	content: ; 
-	line:11
+	line:9
 	startColumn:12
 	endColumn:13
 }
-TokenNo:66
+TokenNo:60
 Token{
 	type:RightBrace
 	content: } 
-	line:12
+	line:10
 	startColumn:0
 	endColumn:1
 }

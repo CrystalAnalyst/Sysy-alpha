@@ -153,18 +153,18 @@ impl Lexer {
     fn get_real_number(&mut self) {
         /* 用于区分浮点数和整数, 其中'.'算作浮点数的一部分 */
         let setoff = self.current;
-        let cur = self.chars.get(self.current);
-        loop {
-            if cur != Some(&'.') && (*cur.unwrap()).is_ascii_digit() {
-                self.current += 1;
-            } else {
-                break;
-            }
+        let mut cur = self.chars.get(self.current);
+        /* 对当前拿到的cur进行检查, 如果cur代表数字则往后遍历, 否则停下 */
+        while cur.map_or(false, |c| c.is_ascii_digit()) {
+            self.current += 1;
+            cur = self.chars.get(self.current);
         }
         self.current = setoff;
         if cur == Some(&'.') {
+            println!("find the float number!");
             self.parse_float();
         } else {
+            println!("find the integer number!");
             self.scan_number();
         }
     }
@@ -172,19 +172,21 @@ impl Lexer {
     fn parse_float(&mut self) {
         /* 将字符串表示的浮点数转化为f32浮点数 */
         let mut float_str: Vec<char> = Vec::new();
-        let cur = self.chars.get(self.current);
-        loop {
-            if cur == Some(&'.') || (*cur.unwrap()).is_ascii_digit() {
-                float_str.push(*cur.unwrap());
-                self.current += 1;
-            } else {
-                break;
-            }
+        let mut cur = self.chars.get(self.current);
+        /* 对当前拿到的cur进行检查, 如果cur不为空, 则继续, 否则停下. */
+        while cur.is_some()
+            && (*cur.unwrap() == '.' || (*cur.unwrap() >= '0' && *cur.unwrap() <= '9'))
+        {
+            float_str.push(*cur.unwrap());
+            self.current += 1;
+            cur = self.chars.get(self.current);
         }
+
         let mut s = String::new();
         for c in float_str {
             s.push(c);
         }
+
         // 把Vec<char>中的字符拼起来转换为f32类型放入sum中.
         let sum = s.parse::<f32>().unwrap();
         let mut t = self.new_token(TokenType::FloatNumber(sum));
@@ -432,7 +434,7 @@ pub fn tokenize(path: String) -> Vec<Token> {
        4.没有panic则正常结束, tokens读取完毕, 返回lexer.tokens
     */
     let mut lexer = Lexer::new(Rc::new(path));
-    lexer.scan(&&keyword_table_init(), &&double_sign_table_init());
+    lexer.scan(&keyword_table_init(), &double_sign_table_init());
     if lexer.is_panicked {
         panic!("Lexer paniced!");
     }
