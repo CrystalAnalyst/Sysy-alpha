@@ -150,6 +150,48 @@ impl Lexer {
         })
     }
 
+    fn get_real_number(&mut self) {
+        /* 用于区分浮点数和整数, 其中'.'算作浮点数的一部分 */
+        let setoff = self.current;
+        let cur = self.chars.get(self.current);
+        loop {
+            if cur != Some(&'.') && (*cur.unwrap()).is_ascii_digit() {
+                self.current += 1;
+            } else {
+                break;
+            }
+        }
+        self.current = setoff;
+        if cur == Some(&'.') {
+            self.parse_float();
+        } else {
+            self.scan_number();
+        }
+    }
+
+    fn parse_float(&mut self) {
+        /* 将字符串表示的浮点数转化为f32浮点数 */
+        let mut float_str: Vec<char> = Vec::new();
+        let cur = self.chars.get(self.current);
+        loop {
+            if cur == Some(&'.') || (*cur.unwrap()).is_ascii_digit() {
+                float_str.push(*cur.unwrap());
+                self.current += 1;
+            } else {
+                break;
+            }
+        }
+        let mut s = String::new();
+        for c in float_str {
+            s.push(c);
+        }
+        // 把Vec<char>中的字符拼起来转换为f32类型放入sum中.
+        let sum = s.parse::<f32>().unwrap();
+        let mut t = self.new_token(TokenType::FloatNumber(sum));
+        t.endpos = self.current;
+        self.tokens.push(t);
+    }
+
     /* 扫描数字,并根据不同进制进行处理. */
     fn scan_number(&mut self) {
         match self.chars.get(self.current..self.current + 2) {
@@ -311,7 +353,7 @@ impl Lexer {
                     self.line_no += 1;
                     self.line_starts.push(self.current);
                 }
-                CharType::Digit => self.scan_number(),
+                CharType::Digit => self.get_real_number(),
                 CharType::Alphabet => self.scan_identifier(keywords),
 
                 CharType::Other('/') => match self.chars.get(self.current + 1) {
