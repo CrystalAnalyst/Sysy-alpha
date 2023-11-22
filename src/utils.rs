@@ -41,7 +41,7 @@ pub fn print_tree(ast: &Vec<Node>, path: &Path, extension: &str, with_type: bool
             with_type用于区分是带类型信息的AST还是不带类型信息的AST.
         */
 
-        //递归(dfs)遍历AST树, 并将其写入文件中, 整体的算法流程看下来就是递归下降Recursive Descending.
+        //递归(dfs)遍历AST树, 并将其写入文件中, 整体的算法流程就是递归下降Recursive Descending.
         match &node.node_type {
             //DeclStmt
             NodeType::DeclStmt(nodes) => {

@@ -8,8 +8,8 @@ use crate::TokenType;
 pub struct Node {
     pub node_type: NodeType,   //NodeType是Ast的节点类型
     pub basic_type: BasicType, //BasicType是SysY语言的基本类型
-    pub startpos: usize,       //startpos是(该)节点在源代码中的起始位置
-    pub endpos: usize,         //endpos是(该)节点在源代码中的结束位置
+    pub startpos: usize,       //startpos是(该)节点在源代码字符流的起始位置
+    pub endpos: usize,         //endpos是(该)节点在源代码字符流的结束位置
 }
 
 impl Node {
@@ -109,7 +109,7 @@ impl Parser {
             name = id.clone();
         } else {
             self.get_current_token()
-                .wrong_token("function or value name".into());
+                .wrong_token("expect function or value name".into());
             return "".to_string();
         }
         name
@@ -638,6 +638,9 @@ impl Parser {
         }
     }
 
+    /* 处理编译单元, 每处理好一个就返回一个ast中的Node.
+     * 处理依据SysY(2022)语言定义:
+     * CompUnit → [ CompUnit ] ( Decl | FuncDef ) */
     fn comp_unit(&mut self) -> Node {
         /* 初始化变量:获取当前token的索引, 起始位置, 基本类型, 变量名 */
         let index = self.current;
@@ -667,12 +670,11 @@ impl Parser {
 }
 
 impl Token {
-    fn wrong_token(&self, type_check: String) {
+    fn wrong_token(&self, expect: String) {
         let lstart = *self.line_start;
         //出错的信息是保存在self.buf中的, 根据index可以把它取出来, 当然这里要转换为迭代器再用collect收集.
         let errline: String = self.buf[*self.line_start..self.endpos].iter().collect();
 
-        //学习下编译器给你指出错误时的“说话艺术”（三部曲）
         //step1.告诉你你出错的类型, 这里是语法分析出错, 具体是遇到了不合规的Token
         println!("{}: {}", "parser error", "Untype_checked token",);
         //step2.告诉你出错的地点:文件名(路径),行号,列号
@@ -701,7 +703,7 @@ impl Token {
             "{} {}{}",
             "^", //^表示在行首,
             "type_check ",
-            type_check //告诉你这个token应该是怎样的,type_check就是说它应该是那样,而不是现在这样.
+            expect //告诉你这个token应该是怎样的,expect就是说它应该是那样,而不是现在这样.
         );
 
         println!("   {}", "|");

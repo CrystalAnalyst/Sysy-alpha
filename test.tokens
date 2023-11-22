@@ -165,7 +165,7 @@ Token{	line:8	<type:RightBrace	value:"}">	}
 TokenNo:82
 Token{	line:8	<type:Semicolon	value:";">	}
 TokenNo:83
-Token{	line:9	<type:Int	value:"int">	}
+Token{	line:9	<type:Identifier("in")	value:"in">	}
 TokenNo:84
 Token{	line:9	<type:Identifier("a")	value:"a">	}
 TokenNo:85
