@@ -64,9 +64,9 @@ impl Runtime {
         }
     }
 
-    fn set_cur_func(&mut self, name: String, funcType: BasicType) {
-        self.cur_func_name = name;
-        self.cur_func_type = funcType;
+    fn set_cur_func(&mut self, funcName: &String, funcType: &BasicType) {
+        self.cur_func_name = funcName.clone();
+        self.cur_func_type = funcType.clone();
     }
 
     fn get_cur_func(&mut self) -> (String, BasicType) {
