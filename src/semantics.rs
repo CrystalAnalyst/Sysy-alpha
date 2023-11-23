@@ -16,3 +16,23 @@ impl Var {
         Var { varType, node }
     }
 }
+
+pub struct Runtime {
+    global: HashMap<String, Var>,
+    local: Vec<HashMap<String, Var>>,
+    loop_count: usize,
+    cur_func_name: String,
+    cur_func_type: BasicType,
+}
+
+impl Runtime {
+    pub fn new() -> Self {
+        Runtime {
+            global: HashMap::new(),
+            local: vec![],
+            loop_count: 0,
+            cur_func_name: String::new(),
+            cur_func_type: BasicType::Nil,
+        }
+    }
+}
