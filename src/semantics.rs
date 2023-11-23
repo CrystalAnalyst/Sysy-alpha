@@ -35,4 +35,41 @@ impl Runtime {
             cur_func_type: BasicType::Nil,
         }
     }
+
+    fn enter_scope(&mut self) {
+        self.local.push(HashMap::new());
+    }
+    fn exit_scope(&mut self) {
+        self.local.pop();
+    }
+
+    //todo: fn insert()
+
+    //todo: fn find()
+
+    fn start_loop(&mut self) {
+        self.loop_count += 1;
+    }
+    fn end_loop(&mut self) {
+        self.loop_count -= 1;
+    }
+
+    fn is_in_loop(&mut self) -> bool {
+        if self.loop_count == 0 {
+            return false;
+        } else if self.loop_count > 0 {
+            return true;
+        } else {
+            unreachable!()
+        }
+    }
+
+    fn set_cur_func(&mut self, name: String, funcType: BasicType) {
+        self.cur_func_name = name;
+        self.cur_func_type = funcType;
+    }
+
+    fn get_cur_func(&mut self) -> (String, BasicType) {
+        return (self.cur_func_name.clone(), self.cur_func_type.clone());
+    }
 }
