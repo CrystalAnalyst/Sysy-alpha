@@ -328,7 +328,7 @@ impl Lexer {
         );
         println!("  {}  ", "|");
         println!(" {:3}{} {}", self.line_no.to_string(), "|", error_info);
-        /* step3. give suggestion on correct*/
+        /* step3. give suggestion on correcting*/
         print!("    {}", "|");
         // 获取错误字符的具体位置, 在前面填充若干个空格
         for _ in 0..self.current - thisline + 1 {
