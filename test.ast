@@ -9,56 +9,8 @@
 |----DeclStmt
 |------Declare of x(Int) in Local scope
 |--------Number 1
+|----DeclStmt
 |------Declare of y(Int) in Local scope
-|--------Number 10
-|--------Number 0
-|--------Number 1
-|--------Number 2
-|--------Number 3
-|--------Number 4
-|--------Number 5
-|--------Number 6
-|--------Number 7
-|--------Number 8
-|--------Number 9
-|----DeclStmt
-|------Declare of metrix(Int) in Local scope
-|--------Number 3
-|--------Number 3
-|--------Initlist
-|----------Number 1
-|----------Number 2
-|----------Number 3
-|--------Initlist
-|----------Number 4
-|----------Number 5
-|----------Number 6
-|--------Initlist
-|----------Number 7
-|----------Number 8
-|----------Number 9
-|----DeclStmt
-|------Declare of a(Int) in Local scope
-|--------Number 10
-|----DeclStmt
-|------Declare of b(Int) in Local scope
-|--------Number 2
-|----DeclStmt
-|------Declare of c(Int) in Local scope
-|--------Number 3
-|----DeclStmt
-|------Declare of d(Int) in Local scope
-|--------Function call add
-|----------Binop Plus
-|------------Access a
-|------------Access b
-|----Return
-|------Number 0
-|Func add,returns Int
-|--Declare of a(Int) in Params scope
-|--Declare of b(Int) in Params scope
-|--Block
-|----Return
-|------Binop Plus
-|--------Access a
-|--------Access b
+|--------Binop Plus
+|----------Access y
+|----------Access x

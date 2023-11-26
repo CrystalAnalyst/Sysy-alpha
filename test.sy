@@ -1,18 +1,5 @@
 int monday = 1;
 const int Tuesday = 2;
 int main() {
-    /* 以下是一些sysy的例子*/
-    int x = 1, y[10] = {
-        0,1,2,3,4,5,6,7,8,9
-    }; 
-    int metrix[3][3] = { {1,2,3},{4,5,6},{7,8,9} };
-    int a@ = 0xA; 
-    int b = 02; 
-    int c = 3;
-    int d = add(a+b); //使用函数
-    return 0;
-}
-int add(int a,int b) 
-{
-    return a + b;
+    int x = 1; int y = y++x;
 }
