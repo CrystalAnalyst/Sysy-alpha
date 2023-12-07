@@ -1,3 +1,14 @@
 int main() {
+    // 8进制
+    int a1 = 05;
+    int a2 = 09;
+    // 16进制
+    int b1 = 0xA;
+    int b2 = 0xG
+    // 10进制
+    int a = 100;
+    // 特殊符号
+    int d1 = $;
+    int d2@ = 100;
     return 0;
 }

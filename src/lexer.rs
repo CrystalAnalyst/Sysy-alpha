@@ -171,24 +171,40 @@ impl Lexer {
     fn parse_number(&mut self, base: u32) {
         let mut sum = 0;
         let mut len = 0;
-        //从self.pos开始, 读取len个字符, 并将其转换为数字, 然后将其相加.
+        let start = self.current; // Store the initial value of self.current
+        let mut flag = true;
         for c in self.chars[self.current..].iter() {
-            //c代表当前字符, 并将其转换为数字, 并将其赋值给val.
             if let Some(val) = c.to_digit(base) {
-                // 在这里, val代表是当前字符的数字值, base是进制基, sum是求得的和.
                 sum = sum * base as i32 + val as i32;
                 len += 1;
             } else {
+                if c.is_alphanumeric() {
+                    flag = false;
+                    len += 1;
+                    continue;
+                }
+                if flag == false {
+                    self.error(
+                        "wrong number range",
+                        "make sure the number is in right range",
+                    );
+                }
                 break;
             }
         }
-        //将sum转换为字符串, 并将其赋值给t.
-        let mut t = self.new_token(TokenType::IntNumber(sum));
-        /*--将pos向后移动len个字符, 并将t的end设置为pos, 然后将t存入tokens中.-- */
-        self.current += len;
-        t.endpos = self.current;
-        self.tokens.push(t);
+        // Calculate the new value of self.current after the loop
+        self.current = start + len; // Update self.current outside the loop
+        if flag {
+            let mut t = self.new_token(TokenType::IntNumber(sum));
+            t.endpos = self.current;
+            self.tokens.push(t);
+        } else {
+            let mut t = self.new_token(TokenType::WrongFormat("进制表示不合法!".into()));
+            t.endpos = self.current;
+            self.tokens.push(t);
+        }
     }
+
     /*
         fn get_real_number(&mut self) {
             /* 用于区分浮点数和整数, 其中'.'算作浮点数的一部分 */
@@ -486,9 +502,9 @@ pub fn tokenize(path: String) -> Vec<Token> {
     */
     let mut lexer = Lexer::new(Rc::new(path));
     lexer.scan(&keyword_table_init(), &double_sign_table_init());
-    if lexer.is_panicked {
+    /*  if lexer.is_panicked {
         panic!("Lexer paniced!");
-    }
+    } */
     lexer.tokens
 }
 

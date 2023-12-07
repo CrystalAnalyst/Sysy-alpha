@@ -9,32 +9,76 @@ Token{	line:1	type:RightParen	value:")"	}
 TokenNo:4
 Token{	line:1	type:LeftBrace	value:"{"	}
 TokenNo:5
-Token{	line:2	type:Int	value:"int"	}
-TokenNo:6
-Token{	line:2	type:Identifier("b")	value:"b"	}
-TokenNo:7
-Token{	line:2	type:Assign	value:"="	}
-TokenNo:8
-Token{	line:2	type:IntNumber(11)	value:"B"	}
-TokenNo:9
-Token{	line:2	type:Semicolon	value:";"	}
-TokenNo:10
 Token{	line:3	type:Int	value:"int"	}
-TokenNo:11
-Token{	line:3	type:Identifier("c")	value:"c"	}
-TokenNo:12
+TokenNo:6
+Token{	line:3	type:Identifier("a1")	value:"a1"	}
+TokenNo:7
 Token{	line:3	type:Assign	value:"="	}
-TokenNo:13
-Token{	line:3	type:IntNumber(0)	value:"0"	}
-TokenNo:14
-Token{	line:3	type:IntNumber(9)	value:"9"	}
-TokenNo:15
+TokenNo:8
+Token{	line:3	type:IntNumber(5)	value:""	}
+TokenNo:9
 Token{	line:3	type:Semicolon	value:";"	}
-TokenNo:16
-Token{	line:4	type:Return	value:"return"	}
-TokenNo:17
-Token{	line:4	type:IntNumber(0)	value:"0"	}
-TokenNo:18
+TokenNo:10
+Token{	line:4	type:Int	value:"int"	}
+TokenNo:11
+Token{	line:4	type:Identifier("a2")	value:"a2"	}
+TokenNo:12
+Token{	line:4	type:Assign	value:"="	}
+TokenNo:13
+Token{	line:4	type:WrongFormat("进制表示不合法!")	value:""	}
+TokenNo:14
 Token{	line:4	type:Semicolon	value:";"	}
+TokenNo:15
+Token{	line:6	type:Int	value:"int"	}
+TokenNo:16
+Token{	line:6	type:Identifier("b1")	value:"b1"	}
+TokenNo:17
+Token{	line:6	type:Assign	value:"="	}
+TokenNo:18
+Token{	line:6	type:IntNumber(10)	value:""	}
 TokenNo:19
-Token{	line:5	type:RightBrace	value:"}"	}
+Token{	line:6	type:Semicolon	value:";"	}
+TokenNo:20
+Token{	line:7	type:Int	value:"int"	}
+TokenNo:21
+Token{	line:7	type:Identifier("b2")	value:"b2"	}
+TokenNo:22
+Token{	line:7	type:Assign	value:"="	}
+TokenNo:23
+Token{	line:7	type:WrongFormat("进制表示不合法!")	value:""	}
+TokenNo:24
+Token{	line:9	type:Int	value:"int"	}
+TokenNo:25
+Token{	line:9	type:Identifier("a")	value:"a"	}
+TokenNo:26
+Token{	line:9	type:Assign	value:"="	}
+TokenNo:27
+Token{	line:9	type:IntNumber(100)	value:""	}
+TokenNo:28
+Token{	line:9	type:Semicolon	value:";"	}
+TokenNo:29
+Token{	line:11	type:Int	value:"int"	}
+TokenNo:30
+Token{	line:11	type:Identifier("d1")	value:"d1"	}
+TokenNo:31
+Token{	line:11	type:Assign	value:"="	}
+TokenNo:32
+Token{	line:11	type:Semicolon	value:";"	}
+TokenNo:33
+Token{	line:12	type:Int	value:"int"	}
+TokenNo:34
+Token{	line:12	type:Identifier("d2")	value:"d2"	}
+TokenNo:35
+Token{	line:12	type:Assign	value:"="	}
+TokenNo:36
+Token{	line:12	type:IntNumber(100)	value:""	}
+TokenNo:37
+Token{	line:12	type:Semicolon	value:";"	}
+TokenNo:38
+Token{	line:13	type:Return	value:"return"	}
+TokenNo:39
+Token{	line:13	type:IntNumber(0)	value:""	}
+TokenNo:40
+Token{	line:13	type:Semicolon	value:";"	}
+TokenNo:41
+Token{	line:14	type:RightBrace	value:"}"	}

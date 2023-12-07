@@ -10,7 +10,7 @@ pub enum TokenType {
     IntNumber(i32),
     FloatNumber(f32),
     Identifier(String),
-
+    WrongFormat(String),
     //Keywords
     /*--return value--*/
     Void,
