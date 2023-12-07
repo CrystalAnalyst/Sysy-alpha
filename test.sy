@@ -1,5 +1,3 @@
-int monday = 1;
-const int Tuesday = 2;
 int main() {
-    int x = 1; int y = y++x;
+    return 0;
 }

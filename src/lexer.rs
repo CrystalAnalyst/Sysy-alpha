@@ -39,7 +39,7 @@ impl std::fmt::Debug for Token {
         //write token to stdout Stream.
         write!(
             f,
-            "Token{{\tline:{:?}\t<type:{:?}\tvalue:{:?}>\t}}",
+            "Token{{\tline:{:?}\ttype:{:?}\tvalue:{:?}\t}}",
             self.line_no,
             self.sort,
             content,
@@ -152,59 +152,14 @@ impl Lexer {
         })
     }
 
-    fn get_real_number(&mut self) {
-        /* 用于区分浮点数和整数, 其中'.'算作浮点数的一部分 */
-        let setoff = self.current;
-        let mut cur = self.chars.get(self.current);
-        /* 对当前拿到的cur进行检查, 如果cur代表数字则往后遍历, 否则停下 */
-        while cur.map_or(false, |c| c.is_ascii_digit()) {
-            self.current += 1;
-            cur = self.chars.get(self.current);
-        }
-        self.current = setoff;
-        if cur == Some(&'.') {
-            //println!("find the float number!");
-            self.parse_float();
-        } else {
-            //println!("find the integer number!");
-            self.scan_number();
-        }
-    }
-
-    fn parse_float(&mut self) {
-        /* 将字符串表示的浮点数转化为f32浮点数 */
-        let mut float_str: Vec<char> = Vec::new();
-        let mut cur = self.chars.get(self.current);
-        /* 对当前拿到的cur进行检查, 如果cur不为空, 则继续, 否则停下. */
-        while cur.is_some()
-            && (*cur.unwrap() == '.' || (*cur.unwrap() >= '0' && *cur.unwrap() <= '9'))
-        {
-            float_str.push(*cur.unwrap());
-            self.current += 1;
-            cur = self.chars.get(self.current);
-        }
-
-        let mut s = String::new();
-        for c in float_str {
-            s.push(c);
-        }
-
-        // 把Vec<char>中的字符拼起来转换为f32类型放入sum中.
-        let sum = s.parse::<f32>().unwrap();
-        let mut t = self.new_token(TokenType::FloatNumber(sum));
-        t.endpos = self.current;
-        self.tokens.push(t);
-    }
-
-    /* 扫描数字,并根据不同进制进行处理. */
-    fn scan_number(&mut self) {
+    fn number(&mut self) {
         match self.chars.get(self.current..self.current + 2) {
             //若是以0x(0X)开头, 则说明是十六进制数.
             Some(&['0', 'x']) | Some(&['0', 'X']) => {
                 self.current += 2;
                 self.parse_number(16);
             }
-            //若是以0开头,则说明是八进制数(参考C语言的规范).
+            //若是以0与任何一个字符开头, 则说明是八进制数.
             Some(&['0', _]) => {
                 self.parse_number(8);
             }
@@ -213,23 +168,116 @@ impl Lexer {
         }
     }
 
-    /* 根据进制计算数字的值,将"值信息"放入token中,再将token推入tokens(存放token的向量)中. */
     fn parse_number(&mut self, base: u32) {
         let mut sum = 0;
         let mut len = 0;
+        //从self.pos开始, 读取len个字符, 并将其转换为数字, 然后将其相加.
         for c in self.chars[self.current..].iter() {
+            //c代表当前字符, 并将其转换为数字, 并将其赋值给val.
             if let Some(val) = c.to_digit(base) {
+                // 在这里, val代表是当前字符的数字值, base是进制基, sum是求得的和.
                 sum = sum * base as i32 + val as i32;
                 len += 1;
             } else {
                 break;
             }
         }
+        //将sum转换为字符串, 并将其赋值给t.
         let mut t = self.new_token(TokenType::IntNumber(sum));
+        /*--将pos向后移动len个字符, 并将t的end设置为pos, 然后将t存入tokens中.-- */
         self.current += len;
         t.endpos = self.current;
         self.tokens.push(t);
     }
+    /*
+        fn get_real_number(&mut self) {
+            /* 用于区分浮点数和整数, 其中'.'算作浮点数的一部分 */
+            let setoff = self.current;
+            let mut cur = self.chars.get(self.current);
+            /* 对当前拿到的cur进行检查, 如果cur代表数字则往后遍历, 否则停下 */
+            while cur.map_or(false, |c| c.is_ascii_digit()) {
+                self.current += 1;
+                cur = self.chars.get(self.current);
+            }
+            self.current = setoff;
+            if cur == Some(&'.') {
+                //println!("find the float number!");
+                self.parse_float();
+            } else {
+                //println!("find the integer number!");
+                self.scan_number();
+            }
+        }
+
+        fn parse_float(&mut self) {
+            /* 将字符串表示的浮点数转化为f32浮点数 */
+            let mut float_str: Vec<char> = Vec::new();
+            let mut cur = self.chars.get(self.current);
+            /* 对当前拿到的cur进行检查, 如果cur不为空, 则继续, 否则停下. */
+            while cur.is_some()
+                && (*cur.unwrap() == '.' || (*cur.unwrap() >= '0' && *cur.unwrap() <= '9'))
+            {
+                float_str.push(*cur.unwrap());
+                self.current += 1;
+                cur = self.chars.get(self.current);
+            }
+
+            let mut s = String::new();
+            for c in float_str {
+                s.push(c);
+            }
+
+            // 把Vec<char>中的字符拼起来转换为f32类型放入sum中.
+            let sum = s.parse::<f32>().unwrap();
+            let mut t = self.new_token(TokenType::FloatNumber(sum));
+            t.endpos = self.current;
+            self.tokens.push(t);
+        }
+
+        /* 扫描数字,并根据不同进制进行处理. */
+        fn scan_number(&mut self) {
+            match self.chars.get(self.current..self.current + 2) {
+                //若是以0x(0X)开头, 则说明是十六进制数.
+                Some(&['0', 'x']) | Some(&['0', 'X']) => {
+                    self.current += 2;
+                    self.parse_number(16);
+                }
+                //若是以0开头,则说明是八进制数(参考C语言的规范).
+                Some(&['0', _]) => {
+                    self.parse_number(8);
+                }
+                //否则就是十进制数.
+                _ => self.parse_number(10),
+            }
+        }
+
+        /* 根据进制计算数字的值,将"值信息"放入token中,再将token推入tokens(存放token的向量)中. */
+        fn parse_number(&mut self, base: u32) {
+            let mut sum = 0;
+            let mut len = 0;
+            for c in self.chars[self.current..].iter() {
+                if let Some(val) = c.to_digit(base) {
+                    if base == 16 {
+                        if !['A', 'B', 'C', 'D', 'E', 'F'].contains(&c) {
+                            println!("Invalid character: {}", c);
+                        } else {
+                            sum = sum * base as i32 + val as i32;
+                            len += 1;
+                        }
+                    }
+                    if base == 8 {
+
+                    }
+                } else {
+                    break;
+                }
+            }
+            let mut t = self.new_token(TokenType::IntNumber(sum));
+            self.current += len;
+            t.endpos = self.current;
+            self.tokens.push(t);
+        }
+    */
 
     /*
         扫描标识符, 并判断是否是关键字.
@@ -357,7 +405,7 @@ impl Lexer {
                     self.line_no += 1;
                     self.line_starts.push(self.current);
                 }
-                CharType::Digit => self.get_real_number(),
+                CharType::Digit => self.number(),
                 CharType::Alphabet => self.scan_identifier(keywords),
 
                 CharType::Other('/') => match self.chars.get(self.current + 1) {
@@ -430,6 +478,7 @@ impl Lexer {
 pub fn tokenize(path: String) -> Vec<Token> {
     /*
        整体的解决步骤：
+       0.这是一个库函数, 库函数一般是封装内部对象的实例函数, 所以需要先new一个对象,再调用该对象的方法.
        1."tokenize"这个动作的执行者是Lexer, 先New一个Lexer作为执行词法分析的实体.
        2.调用Lexer的成员函数scan(), 它执行的过程就是词法分析的过程, 把扫描到的一个个词法单元装入lexer.tokens中.
        3.如果在scan的过程中有错误(在lexer中设置了检查panic的字段),则结束程序.

@@ -1,60 +1,40 @@
 TokenNo:0
-Token{	line:1	<type:Int	value:"int">	}
+Token{	line:1	type:Int	value:"int"	}
 TokenNo:1
-Token{	line:1	<type:Identifier("monday")	value:"monday">	}
+Token{	line:1	type:Identifier("main")	value:"main"	}
 TokenNo:2
-Token{	line:1	<type:Assign	value:"=">	}
+Token{	line:1	type:LeftParen	value:"("	}
 TokenNo:3
-Token{	line:1	<type:IntNumber(1)	value:"1">	}
+Token{	line:1	type:RightParen	value:")"	}
 TokenNo:4
-Token{	line:1	<type:Semicolon	value:";">	}
+Token{	line:1	type:LeftBrace	value:"{"	}
 TokenNo:5
-Token{	line:2	<type:Const	value:"const">	}
+Token{	line:2	type:Int	value:"int"	}
 TokenNo:6
-Token{	line:2	<type:Int	value:"int">	}
+Token{	line:2	type:Identifier("b")	value:"b"	}
 TokenNo:7
-Token{	line:2	<type:Identifier("Tuesday")	value:"Tuesday">	}
+Token{	line:2	type:Assign	value:"="	}
 TokenNo:8
-Token{	line:2	<type:Assign	value:"=">	}
+Token{	line:2	type:IntNumber(11)	value:"B"	}
 TokenNo:9
-Token{	line:2	<type:IntNumber(2)	value:"2">	}
+Token{	line:2	type:Semicolon	value:";"	}
 TokenNo:10
-Token{	line:2	<type:Semicolon	value:";">	}
+Token{	line:3	type:Int	value:"int"	}
 TokenNo:11
-Token{	line:3	<type:Int	value:"int">	}
+Token{	line:3	type:Identifier("c")	value:"c"	}
 TokenNo:12
-Token{	line:3	<type:Identifier("main")	value:"main">	}
+Token{	line:3	type:Assign	value:"="	}
 TokenNo:13
-Token{	line:3	<type:LeftParen	value:"(">	}
+Token{	line:3	type:IntNumber(0)	value:"0"	}
 TokenNo:14
-Token{	line:3	<type:RightParen	value:")">	}
+Token{	line:3	type:IntNumber(9)	value:"9"	}
 TokenNo:15
-Token{	line:3	<type:LeftBrace	value:"{">	}
+Token{	line:3	type:Semicolon	value:";"	}
 TokenNo:16
-Token{	line:4	<type:Int	value:"int">	}
+Token{	line:4	type:Return	value:"return"	}
 TokenNo:17
-Token{	line:4	<type:Identifier("x")	value:"x">	}
+Token{	line:4	type:IntNumber(0)	value:"0"	}
 TokenNo:18
-Token{	line:4	<type:Assign	value:"=">	}
+Token{	line:4	type:Semicolon	value:";"	}
 TokenNo:19
-Token{	line:4	<type:IntNumber(1)	value:"1">	}
-TokenNo:20
-Token{	line:4	<type:Semicolon	value:";">	}
-TokenNo:21
-Token{	line:4	<type:Int	value:"int">	}
-TokenNo:22
-Token{	line:4	<type:Identifier("y")	value:"y">	}
-TokenNo:23
-Token{	line:4	<type:Assign	value:"=">	}
-TokenNo:24
-Token{	line:4	<type:Identifier("y")	value:"y">	}
-TokenNo:25
-Token{	line:4	<type:Plus	value:"+">	}
-TokenNo:26
-Token{	line:4	<type:Plus	value:"+">	}
-TokenNo:27
-Token{	line:4	<type:Identifier("x")	value:"x">	}
-TokenNo:28
-Token{	line:4	<type:Semicolon	value:";">	}
-TokenNo:29
-Token{	line:5	<type:RightBrace	value:"}">	}
+Token{	line:5	type:RightBrace	value:"}"	}
