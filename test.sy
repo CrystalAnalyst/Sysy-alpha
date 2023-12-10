@@ -4,7 +4,7 @@ int main() {
     int a2 = 09;
     // 16进制
     int b1 = 0xA;
-    int b2 = 0xG
+    int b2 = 0xG;
     // 10进制
     int a = 100;
     // 特殊符号

@@ -1,11 +1,10 @@
-/*
-use std::{collections::HashMap, fs::File, io::Read, path::Path, usize};
+use std::{collections::HashMap, usize};
 
-use crate::{builtin_funcs, parser::Node, BasicType};
+use crate::{parser::Node, BasicType};
 
 static mut FILEPATH: String = String::new();
 
-#[derive(clone)]
+#[derive(Clone)]
 pub struct Var {
     vartype: BasicType,
     node: Node,
@@ -38,6 +37,7 @@ impl Runtime {
     fn enter_scope(&mut self) {
         self.local.push(HashMap::new());
     }
+
     fn exit_scope(&mut self) {
         self.local.pop();
     }
@@ -49,6 +49,7 @@ impl Runtime {
     fn start_loop(&mut self) {
         self.loop_count += 1;
     }
+
     fn end_loop(&mut self) {
         self.loop_count -= 1;
     }
@@ -63,14 +64,12 @@ impl Runtime {
         }
     }
 
-    fn set_cur_func(&mut self, funcName: &String, funcType: &BasicType) {
-        self.cur_func_name = funcName.clone();
-        self.cur_func_type = funcType.clone();
+    fn set_cur_func(&mut self, func_name: &String, func_type: &BasicType) {
+        self.cur_func_name = func_name.clone();
+        self.cur_func_type = func_type.clone();
     }
 
     fn get_cur_func(&mut self) -> (String, BasicType) {
         return (self.cur_func_name.clone(), self.cur_func_type.clone());
     }
 }
-
-*/
