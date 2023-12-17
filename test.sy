@@ -1,10 +1,10 @@
 int main() {
     // 8进制
     int a1 = 05;
-    int a2 = 09;
+    int a2 = 08;
     // 16进制
-    int b1 = 0xA;
-    int b2 = 0xG;
+    int b1 = 0xAB;
+    int b2 = 0xBG;
     // 10进制
     int a = 100;
     // 特殊符号

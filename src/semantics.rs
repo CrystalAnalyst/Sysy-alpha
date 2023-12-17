@@ -1,3 +1,4 @@
+/*
 use std::{collections::HashMap, usize};
 
 use crate::{parser::Node, BasicType};
@@ -9,6 +10,7 @@ pub struct Var {
     vartype: BasicType,
     node: Node,
 }
+
 impl Var {
     pub fn new(vartype: BasicType, node: Node) -> Self {
         Var { vartype, node }
@@ -73,3 +75,4 @@ impl Runtime {
         return (self.cur_func_name.clone(), self.cur_func_type.clone());
     }
 }
+*/

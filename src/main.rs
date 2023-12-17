@@ -1,3 +1,6 @@
+#![allow(dead_code)]
+#![allow(unused_variables)]
+
 use std::path::Path;
 //use sysy_alpha::parser::parse;
 use sysy_alpha::{lexer::tokenize, utils::print_tokens /*utils::print_tree*/};
