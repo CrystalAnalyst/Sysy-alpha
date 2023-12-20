@@ -76,7 +76,7 @@ impl Parser {
     fn type_check(&mut self, sort: TokenType) {
         let t = self.get_current_token();
         if t.sort != sort {
-            t.wrong_token(format!("{:?}", sort));
+            t.wrong_token(format!("Error type B at this line: missing {:?}", sort));
         }
         self.current += 1;
     }
@@ -371,11 +371,72 @@ impl Parser {
 
     /*-----------------表达式类----------------- */
 
+    fn primary_exp(&mut self, cond: bool) -> Node {
+        let t = self.get_current_token();
+        let startpos = t.startpos;
+        self.current += 1;
+
+        let result = match &t.sort {
+            TokenType::LeftParen => {
+                let exp = self.const_exp(cond);
+                if self.type_judge(TokenType::RightParen) {
+                    Some(exp)
+                } else {
+                    None
+                }
+            }
+            TokenType::IntNumber(num) => Some(Node::new(NodeType::Number(*num))),
+            TokenType::FloatNumber(num) => Some(Node::new(NodeType::FloatNumber(*num))),
+            TokenType::Identifier(id) => {
+                if self.type_judge(TokenType::LeftParen) {
+                    let mut args = vec![];
+                    if !self.type_judge(TokenType::RightParen) {
+                        args.push(self.const_exp(cond));
+                        while self.type_judge(TokenType::Comma) {
+                            args.push(self.const_exp(cond));
+                        }
+                        if self.type_judge(TokenType::RightParen) {
+                            Some(Node::new(NodeType::Call(
+                                id.clone(),
+                                args,
+                                Box::new(Node::zero_init()),
+                            )))
+                        } else {
+                            None
+                        }
+                    } else {
+                        Some(Node::new(NodeType::Call(
+                            id.clone(),
+                            args,
+                            Box::new(Node::zero_init()),
+                        )))
+                    }
+                } else {
+                    Some(Node::new(NodeType::Aceess(
+                        id.to_string(),
+                        self.seek_array(false),
+                        Box::new(Node::zero_init()),
+                    )))
+                }
+            }
+            _ => {
+                t.wrong_token("Error type B at this line : Expression cannot resolved!".into());
+                None
+            }
+        };
+
+        let endpos = self.get_endpos();
+        match result {
+            Some(node) => node.bound(startpos, endpos),
+            None => Node::zero_init().bound(startpos, endpos),
+        }
+    }
+
     /* primary_exp: 基本表达式
      *    - Ident
      *    - Number
      *    - LeftParen const_exp RightParen */
-    fn primary_exp(&mut self, cond: bool) -> Node {
+    /*fn primary_exp(&mut self, cond: bool) -> Node {
         /*
          * 1. primary_exp:
          *    - (LeftParen const_exp RightParen)
@@ -437,13 +498,14 @@ impl Parser {
                 }
             }
             _ => {
-                t.wrong_token("Error type B at this line : expression".into());
+                t.wrong_token("Error type B at this line : Expression cannot resolved!".into());
                 None
             }
         };
         let endpos = self.get_endpos();
-        result.expect("Wrong expession").bound(startpos, endpos)
-    }
+        //result.expect("Wrong expession").bound(startpos, endpos)
+        result.expect("").bound(startpos, endpos)
+    }*/
 
     /* Unary expessions:一元表达式 */
     // 明确一点, SysY语言的单目运算符(作用于单独一个变量的运算符)有+,-,!
@@ -670,13 +732,13 @@ impl Parser {
 }
 
 impl Token {
-    fn wrong_token(&self, _expect: String) {
+    fn wrong_token(&self, expect: String) {
         let lstart = *self.line_start;
         //出错的信息是保存在self.buf中的, 根据index可以把它取出来, 当然这里要转换为迭代器再用collect收集.
         let errline: String = self.buf[*self.line_start..self.endpos].iter().collect();
 
         //step1.告诉你你出错的类型, 这里是语法分析出错, 具体是遇到了不合规的Token
-        println!("{}: {}", "parser error", "Errro type B found.",);
+        println!("{}: {}", "Parsing error", "Error type B found.",);
         //step2.告诉你出错的地点:文件名(路径),行号,列号
         println!(
             "  {} {}:{}:{}",
@@ -702,7 +764,7 @@ impl Token {
         println!(
             "{} {}",
             "^", //^表示在行首,
-            "Error type B at this Line",
+            expect
         );
 
         println!("   {}", "|");

@@ -11,22 +11,84 @@ Token{	line:2	type:LeftBrace	value:"{"	}
 TokenNo:5
 Token{	line:3	type:Int	value:"int"	}
 TokenNo:6
-Token{	line:3	type:Identifier("i")	value:"i"	}
+Token{	line:3	type:Identifier("a")	value:"a"	}
 TokenNo:7
-Token{	line:3	type:Assign	value:"="	}
+Token{	line:3	type:LeftBracket	value:"["	}
 TokenNo:8
-Token{	line:3	type:WrongFormat("进制表示不合法!")	value:""	}
+Token{	line:3	type:IntNumber(10)	value:""	}
 TokenNo:9
-Token{	line:3	type:Semicolon	value:";"	}
+Token{	line:3	type:RightBracket	value:"]"	}
 TokenNo:10
-Token{	line:4	type:Int	value:"int"	}
+Token{	line:3	type:LeftBracket	value:"["	}
 TokenNo:11
-Token{	line:4	type:Identifier("j")	value:"j"	}
+Token{	line:3	type:IntNumber(12)	value:""	}
 TokenNo:12
-Token{	line:4	type:Assign	value:"="	}
+Token{	line:3	type:RightBracket	value:"]"	}
 TokenNo:13
-Token{	line:4	type:WrongFormat("进制表示不合法!")	value:""	}
+Token{	line:3	type:Semicolon	value:";"	}
 TokenNo:14
-Token{	line:4	type:Semicolon	value:";"	}
+Token{	line:4	type:Int	value:"int"	}
 TokenNo:15
-Token{	line:5	type:RightBrace	value:"}"	}
+Token{	line:4	type:Identifier("i")	value:"i"	}
+TokenNo:16
+Token{	line:4	type:Semicolon	value:";"	}
+TokenNo:17
+Token{	line:5	type:Identifier("a")	value:"a"	}
+TokenNo:18
+Token{	line:5	type:LeftBracket	value:"["	}
+TokenNo:19
+Token{	line:5	type:IntNumber(5)	value:""	}
+TokenNo:20
+Token{	line:5	type:Comma	value:","	}
+TokenNo:21
+Token{	line:5	type:IntNumber(3)	value:""	}
+TokenNo:22
+Token{	line:5	type:RightBracket	value:"]"	}
+TokenNo:23
+Token{	line:5	type:Assign	value:"="	}
+TokenNo:24
+Token{	line:5	type:IntNumber(5)	value:""	}
+TokenNo:25
+Token{	line:5	type:Semicolon	value:";"	}
+TokenNo:26
+Token{	line:6	type:If	value:"if"	}
+TokenNo:27
+Token{	line:6	type:LeftParen	value:"("	}
+TokenNo:28
+Token{	line:6	type:Identifier("a")	value:"a"	}
+TokenNo:29
+Token{	line:6	type:LeftBracket	value:"["	}
+TokenNo:30
+Token{	line:6	type:IntNumber(1)	value:""	}
+TokenNo:31
+Token{	line:6	type:RightBracket	value:"]"	}
+TokenNo:32
+Token{	line:6	type:LeftBracket	value:"["	}
+TokenNo:33
+Token{	line:6	type:IntNumber(2)	value:""	}
+TokenNo:34
+Token{	line:6	type:RightBracket	value:"]"	}
+TokenNo:35
+Token{	line:6	type:Equal	value:"=="	}
+TokenNo:36
+Token{	line:6	type:IntNumber(0)	value:""	}
+TokenNo:37
+Token{	line:6	type:RightParen	value:")"	}
+TokenNo:38
+Token{	line:7	type:Identifier("i")	value:"i"	}
+TokenNo:39
+Token{	line:7	type:Assign	value:"="	}
+TokenNo:40
+Token{	line:7	type:IntNumber(1)	value:""	}
+TokenNo:41
+Token{	line:8	type:Else	value:"else"	}
+TokenNo:42
+Token{	line:9	type:Identifier("i")	value:"i"	}
+TokenNo:43
+Token{	line:9	type:Assign	value:"="	}
+TokenNo:44
+Token{	line:9	type:IntNumber(0)	value:""	}
+TokenNo:45
+Token{	line:9	type:Semicolon	value:";"	}
+TokenNo:46
+Token{	line:10	type:RightBrace	value:"}"	}
