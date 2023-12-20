@@ -1,7 +1,8 @@
 |Func main,returns Int
 |--Block
 |----DeclStmt
-|------Declare of a(Int) in Local scope
-|--------Number 11
-|----Return
-|------Number 0
+|------Declare of i(Int) in Local scope
+|--------Number 83
+|----DeclStmt
+|------Declare of j(Int) in Local scope
+|--------Number 63

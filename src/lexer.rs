@@ -169,6 +169,11 @@ impl Lexer {
     }
 
     fn parse_number(&mut self, base: u32) {
+        let light = match base {
+            8 => 1,
+            16 => 2,
+            _ => 3,
+        };
         let mut sum = 0;
         let mut len = 0;
         let start = self.current; // Store the initial value of self.current
@@ -184,10 +189,19 @@ impl Lexer {
                     continue;
                 }
                 if flag == false {
-                    self.error(
-                        "wrong number range",
-                        "make sure the number is in right range",
-                    );
+                    if light == 1 {
+                        self.error(
+                            "Lexer error: Illegal OCTAL number",
+                            "Error type A at this line: Illegal octal number",
+                        );
+                    } else if light == 2 {
+                        self.error(
+                            "Lexer error: Illegal HEXIDECIMAL number",
+                            "Error type A at this line: Illegal hexadecimal number",
+                        );
+                    } else {
+                        self.error("Lexer error: Illegal number", "Error type A at this line");
+                    }
                 }
                 break;
             }
@@ -374,9 +388,13 @@ impl Lexer {
         /* step1. collect error info */
         let mut len = 0;
         let thisline = self.line_starts[self.line_no - 1];
+        let mut white_space_pos = 0;
         for &c in self.chars[thisline..].iter() {
             if c == '\n' {
                 break;
+            }
+            if c == '=' {
+                white_space_pos = len;
             }
             len += 1;
         }
@@ -398,8 +416,12 @@ impl Lexer {
         for _ in 0..self.current - thisline + 1 {
             print!("{}", ' ');
         }
+
+        let c: String = self.chars[thisline + white_space_pos + 1..thisline + len]
+            .iter()
+            .collect();
         // 指出错误字符具体位置, 并打印出修正意见
-        println!("{} {}", "^", suggest);
+        println!("{} {}:{}", "^", suggest, c);
         println!("  {}", "|");
         self.current += 1;
         self.is_panicked = true;
@@ -452,7 +474,10 @@ impl Lexer {
                         t.endpos = self.current;
                         self.tokens.push(t);
                     } else {
-                        self.error("invalid character!", "check if it is a ASCII character");
+                        self.error(
+                            "invalid character!",
+                            "Error type A at this line:Invalid character",
+                        );
                     }
                 }
             }
@@ -494,9 +519,9 @@ impl Lexer {
 pub fn tokenize(path: String) -> Vec<Token> {
     /*
        整体的解决步骤：
-       0.这是一个库函数, 库函数一般是封装内部对象的实例函数, 所以需要先new一个对象,再调用该对象的方法.
+       0.这是一个库函数(暴露给外界), 库函数一般是封装内部对象的实例函数, 所以需要先new一个对象,再调用该对象的方法.
        1."tokenize"这个动作的执行者是Lexer, 先New一个Lexer作为执行词法分析的实体.
-       2.调用Lexer的成员函数scan(), 它执行的过程就是词法分析的过程, 把扫描到的一个个词法单元装入lexer.tokens中.
+       2.调用Lexer的成员函数scan(),扫描整个文件,把扫描到的一个个词法单元装入lexer.tokens中.
        3.如果在scan的过程中有错误(在lexer中设置了检查panic的字段),则结束程序.
        4.没有panic则正常结束, tokens读取完毕, 返回lexer.tokens
     */

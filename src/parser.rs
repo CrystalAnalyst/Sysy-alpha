@@ -95,7 +95,7 @@ impl Parser {
                 Some(BasicType::Const)
             }
             _ => {
-                t.wrong_token("invalid type declare".into());
+                t.wrong_token("Error type B at this line: invalid type declare".into());
                 None
             }
         };
@@ -109,7 +109,7 @@ impl Parser {
             name = id.clone();
         } else {
             self.get_current_token()
-                .wrong_token("expect function or value name".into());
+                .wrong_token("Error typbe B at this line: expect function or value name".into());
             return "".to_string();
         }
         name
@@ -155,7 +155,7 @@ impl Parser {
             TokenType::Int => Some(BasicType::Int),
             TokenType::Float => Some(BasicType::Float),
             _ => {
-                t.wrong_token("type define".into());
+                t.wrong_token("Error type B at this line: type define".into());
                 None
             }
         }
@@ -192,7 +192,7 @@ impl Parser {
                 }
             } else if basic_type == BasicType::Const {
                 self.get_current_token()
-                    .wrong_token("assign in const declaration".into());
+                    .wrong_token("Error type B at this line: assign in const declaration".into());
                 unreachable!();
             } else {
                 init = None;
@@ -242,7 +242,7 @@ impl Parser {
                 }
                 _ => {
                     self.get_current_token()
-                        .wrong_token("expession or initlist".into());
+                        .wrong_token("Error type B at this line : expession or initlist".into());
                 }
             }
         }
@@ -437,7 +437,7 @@ impl Parser {
                 }
             }
             _ => {
-                t.wrong_token("expession".into());
+                t.wrong_token("Error type B at this line : expression".into());
                 None
             }
         };
@@ -670,13 +670,13 @@ impl Parser {
 }
 
 impl Token {
-    fn wrong_token(&self, expect: String) {
+    fn wrong_token(&self, _expect: String) {
         let lstart = *self.line_start;
         //出错的信息是保存在self.buf中的, 根据index可以把它取出来, 当然这里要转换为迭代器再用collect收集.
         let errline: String = self.buf[*self.line_start..self.endpos].iter().collect();
 
         //step1.告诉你你出错的类型, 这里是语法分析出错, 具体是遇到了不合规的Token
-        println!("{}: {}", "parser error", "Untype_checked token",);
+        println!("{}: {}", "parser error", "Errro type B found.",);
         //step2.告诉你出错的地点:文件名(路径),行号,列号
         println!(
             "  {} {}:{}:{}",
@@ -700,14 +700,13 @@ impl Token {
             print!("{}", ' ');
         }
         println!(
-            "{} {}{}",
+            "{} {}",
             "^", //^表示在行首,
-            "type_check ",
-            expect //告诉你这个token应该是怎样的,expect就是说它应该是那样,而不是现在这样.
+            "Error type B at this Line",
         );
 
         println!("   {}", "|");
-        panic!("Untype_checked token");
+        //panic!("Untype_checked token");
     }
 }
 

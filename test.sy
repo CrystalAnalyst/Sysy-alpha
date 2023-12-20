@@ -1,14 +1,5 @@
-int main() {
-    // 8进制
-    int a1 = 05;
-    int a2 = 08;
-    // 16进制
-    int b1 = 0xAB;
-    int b2 = 0xBG;
-    // 10进制
-    int a = 100;
-    // 特殊符号
-    int d1 = $;
-    int d2@ = 100;
-    return 0;
+int main()
+{
+ int i= 09;
+ int j= 0x3G;
 }
