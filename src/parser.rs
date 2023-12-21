@@ -72,8 +72,6 @@ impl Parser {
         }
     }
 
-    /* 关键字表 */
-
     fn type_check(&mut self, sort: TokenType) {
         let t = self.get_current_token();
         let mut sign = String::new();

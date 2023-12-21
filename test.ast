@@ -1,25 +1,8 @@
 |Func main,returns Int
 |--Block
 |----DeclStmt
-|------Declare of a(Int) in Local scope
-|--------Number 10
-|--------Number 12
-|----DeclStmt
 |------Declare of i(Int) in Local scope
-|----ExprStmt
-|------Access a
-|--------Number 5
-|----ExprStmt
-|------Number 0
-|----ExprStmt
-|------Number 0
-|----ExprStmt
-|------Access a
-|--------Number 1
-|--------Number 2
-|----ExprStmt
-|------Number 0
-|----ExprStmt
-|------Number 1
-|----Assign i
-|------Number 0
+|--------Number 83
+|----DeclStmt
+|------Declare of j(Int) in Local scope
+|--------Number 63
