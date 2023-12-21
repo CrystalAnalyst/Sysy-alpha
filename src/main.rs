@@ -20,4 +20,6 @@ fn main() {
     print_tree(&ast, Path::new(&ast_path), "ast", false);
     /* todo: 语义分析, 语法树ast -> 语义树sem(附带类型信息的ast) */
     /* 语义分析的基本想法: 做一个ast的解释器, 对ast作dfs时根据Node的类型执行相对应的语义. */
+    //let annotated_ast = semantics(&ast, source_path);
+    //print_tree(&ast, Path::new(&ast_path), "opt_ast", true);
 }

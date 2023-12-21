@@ -123,8 +123,8 @@ pub enum NodeType {
     BinOp(TokenType, Box<Node>, Box<Node>),
 
     /* 函数类 */
-    // FuncDef(Type, Name, [Params], Block).
-    FuncDef(BasicType, String, Vec<Node>, Box<Node>),
+    // Func(Type, Name, [Params], Block).
+    Func(BasicType, String, Vec<Node>, Box<Node>),
     Block(Vec<Node>),
     Return(Option<Box<Node>>),
     Call(String, Vec<Node>, Box<Node>),

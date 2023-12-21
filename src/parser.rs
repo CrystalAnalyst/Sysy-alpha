@@ -733,7 +733,7 @@ impl Parser {
             }
             let body = self.block();
             let endpos = self.get_endpos();
-            return Node::new(NodeType::FuncDef(basic_type, name, params, Box::new(body)))
+            return Node::new(NodeType::Func(basic_type, name, params, Box::new(body)))
                 .bound(startpos, endpos);
         }
 

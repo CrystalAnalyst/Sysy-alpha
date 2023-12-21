@@ -51,7 +51,7 @@ pub fn print_tree(ast: &Vec<Node>, path: &Path, extension: &str, with_type: bool
                 }
             }
             //Func
-            NodeType::FuncDef(ret, name, args, body) => {
+            NodeType::Func(ret, name, args, body) => {
                 print_len(level, format!("Func {},returns {:?}", name, ret), output);
                 //output.write(b"//args\n");
                 for arg in args {
