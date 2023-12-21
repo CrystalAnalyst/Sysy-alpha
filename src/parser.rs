@@ -3,10 +3,6 @@ use crate::BasicType;
 use crate::NodeType;
 use crate::Scope;
 use crate::TokenType;
-use std::collections::BTreeMap;
-use std::collections::HashMap;
-use std::ptr::null;
-
 #[derive(Clone)]
 pub struct Node {
     pub node_type: NodeType,   //NodeType是Ast的节点类型
