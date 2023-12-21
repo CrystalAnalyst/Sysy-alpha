@@ -3,6 +3,9 @@ use crate::BasicType;
 use crate::NodeType;
 use crate::Scope;
 use crate::TokenType;
+use std::collections::BTreeMap;
+use std::collections::HashMap;
+use std::ptr::null;
 
 #[derive(Clone)]
 pub struct Node {
@@ -73,10 +76,24 @@ impl Parser {
         }
     }
 
+    /* 关键字表 */
+
     fn type_check(&mut self, sort: TokenType) {
         let t = self.get_current_token();
+        let mut sign = String::new();
         if t.sort != sort {
-            t.wrong_token(format!("Error type B at this line: missing {:?}", sort));
+            match sort {
+                TokenType::Comma => sign = "','".to_string(),
+                TokenType::Semicolon => sign = "';'".to_string(),
+                TokenType::LeftBrace => sign = "'{'".to_string(),
+                TokenType::RightBrace => sign = "'}'".to_string(),
+                TokenType::LeftBracket => sign = "'['".to_string(),
+                TokenType::RightBracket => sign = "']'".to_string(),
+                TokenType::LeftParen => sign = "'('".to_string(),
+                TokenType::RightParen => sign = "')'".to_string(),
+                _ => {}
+            }
+            t.wrong_token(format!("Error type B at this line: missing {:?}", sign));
         }
         self.current += 1;
     }
