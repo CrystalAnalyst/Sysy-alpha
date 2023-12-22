@@ -111,7 +111,7 @@ pub fn print_tree(ast: &Vec<Node>, path: &Path, extension: &str, with_type: bool
                 }
             }
             //Access
-            NodeType::Aceess(name, indexes, _) => {
+            NodeType::Access(name, indexes, _) => {
                 let mut str = format!("Access {}", name);
                 if with_type {
                     str.push_str(&format!(" with type {:?}", node.basic_type));

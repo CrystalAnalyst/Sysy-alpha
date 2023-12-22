@@ -118,7 +118,7 @@ pub enum NodeType {
     // 表达式语句, 一个表达式后跟一个';'
     ExprStmt(Box<Node>),
     // ArrayName, [index], Exp(二维数组按行取可以取出一行元素,Exp在这里就代表多维数组中按某一维度进行访问).
-    Aceess(String, Option<Vec<Node>>, Box<Node>),
+    Access(String, Option<Vec<Node>>, Box<Node>),
     // BinaryOperator, lhs, rhs.
     BinOp(TokenType, Box<Node>, Box<Node>),
 

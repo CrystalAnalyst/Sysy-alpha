@@ -423,7 +423,7 @@ impl Parser {
                         )))
                     }
                 } else {
-                    Some(Node::new(NodeType::Aceess(
+                    Some(Node::new(NodeType::Access(
                         id.to_string(),
                         self.seek_array(false),
                         Box::new(Node::zero_init()),
