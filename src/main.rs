@@ -1,8 +1,4 @@
-#![allow(dead_code)]
-#![allow(unused_variables)]
-
 use std::path::Path;
-//use sysy_alpha::parser::parse;
 use sysy_alpha::{
     lexer::tokenize, parser::parse, semantics::semantic, utils::print_tokens, utils::print_tree,
 };
@@ -24,5 +20,5 @@ fn main() {
 
     /* 语义分析, 语法树ast -> 语义树sem(附带类型信息的ast) */
     let annotated_ast = semantic(&ast, &source);
-    print_tree(&ast, Path::new(&ast_path), "sem", true);
+    print_tree(&annotated_ast, Path::new(&ast_path), "sem", true);
 }

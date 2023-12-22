@@ -64,7 +64,10 @@ pub fn print_tree(ast: &Vec<Node>, path: &Path, extension: &str, with_type: bool
             NodeType::Number(num) => {
                 let mut str = format!("Number {}", num);
                 if with_type {
-                    str.push_str(&format!(" sema-check success"));
+                    str.push_str(&format!(
+                        "[Semantic-check] with type: {:?}",
+                        node.basic_type
+                    ));
                 }
                 print_len(level, str, output);
             }
@@ -72,7 +75,10 @@ pub fn print_tree(ast: &Vec<Node>, path: &Path, extension: &str, with_type: bool
             NodeType::FloatNumber(num) => {
                 let mut str = format!("FloatNumber {}", num);
                 if with_type {
-                    str.push_str(&format!(" sema-check success"));
+                    str.push_str(&format!(
+                        "[Semantic-check] with type: {:?}",
+                        node.basic_type
+                    ));
                 }
                 print_len(level, str, output);
             }
@@ -114,7 +120,10 @@ pub fn print_tree(ast: &Vec<Node>, path: &Path, extension: &str, with_type: bool
             NodeType::Access(name, indexes, _) => {
                 let mut str = format!("Access {}", name);
                 if with_type {
-                    str.push_str(&format!(" sema-check success"));
+                    str.push_str(&format!(
+                        "[Semantic-check] with type: {:?}",
+                        node.basic_type
+                    ));
                 }
                 print_len(level, str, output);
                 if let Some(indexeslist) = indexes {
@@ -127,7 +136,10 @@ pub fn print_tree(ast: &Vec<Node>, path: &Path, extension: &str, with_type: bool
             NodeType::BinOp(ttype, lhs, rhs) => {
                 let mut str = format!("Binop {:?}", ttype);
                 if with_type {
-                    str.push_str(&format!(" sema-check success"));
+                    str.push_str(&format!(
+                        "[Semantic-check] with type: {:?}",
+                        node.basic_type
+                    ));
                 }
                 print_len(level, str, output);
                 //output.write(b"//lhs\n");
@@ -139,7 +151,10 @@ pub fn print_tree(ast: &Vec<Node>, path: &Path, extension: &str, with_type: bool
             NodeType::Call(name, args, _) => {
                 let mut str = format!("Function call {}", name);
                 if with_type {
-                    str.push_str(&format!(" sema-check success"));
+                    str.push_str(&format!(
+                        "[Semantic-check] with type: {:?}",
+                        node.basic_type
+                    ));
                 }
                 print_len(level, str, output);
                 for arg in args {

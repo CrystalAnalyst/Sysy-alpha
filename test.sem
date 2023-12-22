@@ -1,19 +1,26 @@
-|Func a,returns Int
-|--Declare of x(Int) in Params scope
-|--Declare of y(Int) in Params scope
-|--Block
-|----Return
-|------Binop Plus sema-check success
-|--------Access x sema-check success
-|--------Access y sema-check success
-|Func a,returns Int
-|--Declare of b(Int) in Params scope
-|--Block
-|----Return
-|------Access b sema-check success
 |Func main,returns Int
 |--Block
-|----ExprStmt
-|------Function call a sema-check success
-|--------Number 1 sema-check success
-|--------Number 2 sema-check success
+|----DeclStmt
+|------Declare of a(Int) in Local scope
+|--------Number 1[Semantic-check] with type: Const
+|----DeclStmt
+|------Declare of arr(IntArray([3, 3])) in Local scope
+|--------Number 3[Semantic-check] with type: Const
+|--------Number 3[Semantic-check] with type: Const
+|--------Number 0[Semantic-check] with type: Const
+|--------Number 1[Semantic-check] with type: Const
+|--------Number 2[Semantic-check] with type: Const
+|--------Number 3[Semantic-check] with type: Const
+|--------Number 4[Semantic-check] with type: Const
+|--------Number 5[Semantic-check] with type: Const
+|--------Number 6[Semantic-check] with type: Const
+|--------Number 7[Semantic-check] with type: Const
+|--------Number 8[Semantic-check] with type: Const
+|----DeclStmt
+|------Declare of b(Float) in Local scope
+|--------FloatNumber 3.14[Semantic-check] with type: Float
+|----DeclStmt
+|------Declare of x(Const) in Local scope
+|--------Number 20[Semantic-check] with type: Const
+|----Return
+|------Number 0[Semantic-check] with type: Const
