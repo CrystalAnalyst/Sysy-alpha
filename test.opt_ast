@@ -6,4 +6,4 @@
 |----DeclStmt
 |------Declare of i(Int) in Local scope
 |----Return
-|------Number 0
+|------Number 0 with type Nil

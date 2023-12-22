@@ -4,7 +4,7 @@
 
 use crate::{parser::Node, BasicType, NodeType, Scope, TokenType};
 use colored::Colorize;
-use std::{collections::HashMap, fs::File, path::Path, usize};
+use std::{collections::HashMap, fs::File, io::Read, path::Path, usize};
 
 static mut FILEPATH: String = String::new();
 
@@ -81,12 +81,12 @@ impl Runtime {
             if self.local.is_empty() {
                 if let Some(val) = self.global.get(&name) {
                     if matches!(val.node.node_type, NodeType::Decl(..)) {
-                        //错误处理：该变量/函数已经全局定义过.
+                        node.error_spot("this variable had already been declared!".into());
                     }
                 }
             } else {
                 if self.local.last().unwrap().contains_key(&name) {
-                    // 错误处理: 该变量/函数已经局部定义过.
+                    node.error_spot("this variable had already been declared!".into());
                 }
             }
         }
@@ -101,7 +101,6 @@ impl Runtime {
         }
     }
 
-    //todo: fn find()
     fn find(&self, name: &String, node: &Node) -> (BasicType, Node) {
         // step1. 从当前局部作用域往回查找
         for map in self.local.iter().rev() {
@@ -113,16 +112,28 @@ impl Runtime {
         if let Some(var) = self.global.get(name) {
             return (var.basic_type.clone(), var.node.clone());
         } else {
-            //处理错误: 该函数/变量尚未定义过
-            unreachable!()
+            // 根据node的类型是函数还是其它分别输出不同的信息
+            match node.basic_type {
+                BasicType::Func(..) => {
+                    node.error_spot(format!("function {:?} is not defined!", name.clone()));
+                }
+                _ => {
+                    node.error_spot(format!("variable {:?} is not defined!", name.clone()));
+                }
+            }
+            unreachable!();
         }
     }
 }
 
 impl Node {
     fn error_spot(&self, msg: String) {
-        let code = String::new();
-
+        let path = unsafe { Path::new(&FILEPATH) };
+        let mut code = String::new();
+        File::open(path)
+            .expect("failed to read source code")
+            .read_to_string(&mut code)
+            .expect("read code to String failed");
         let code_chars: Vec<char> = code.chars().collect();
         let mut line_startpos = self.startpos;
         while line_startpos != 0 && code_chars[line_startpos] != '\n' {
@@ -132,7 +143,6 @@ impl Node {
         while line_endpos != code.len() && code_chars[line_endpos] != '\n' {
             line_endpos += 1;
         }
-
         let mut startpos_line = 1;
         let mut index = 0;
         while index != line_startpos {
@@ -141,7 +151,6 @@ impl Node {
             }
             index += 1;
         }
-
         let code_lines = code[line_startpos..line_endpos].to_string();
         let mut sign_lines = String::new();
         for i in line_startpos..line_endpos {
@@ -181,7 +190,6 @@ impl Node {
                 (startpos_line + i).to_string().blue().bold()
             );
         }
-        //panic!("{}", msg);
     }
 }
 
@@ -191,37 +199,12 @@ fn traverse(node: &Node, ctx: &mut Runtime) -> Node {
     /* 2. 语义分析的结果是新的AST树, 就是你要的Anonated AST, 经过语义检查后的AST. */
     use NodeType::*;
     match &node.node_type {
-        /* control flow */
-        Break => {
-            if !ctx.is_in_loop() {
-                node.error_spot(format!("Break should in a loop"));
-            }
-            node.clone() //返回带Break语义的节点
-        }
-        Continue => {
-            if !ctx.is_in_loop() {
-                node.error_spot(format!("Continue should in a loop"));
-            }
-            node.clone() //返回带Continue语义的节点
-        }
-        /* literal */
+        /*---------第一类:Numbers,Variables and Arrays--------*/
         Number(_) => {
             let mut new_node = node.clone();
             new_node.basic_type = BasicType::Const;
             new_node //返回Const语义的节点
         }
-
-        /* declStmt, List of Decl. */
-        DeclStmt(decls) => {
-            // 用Vec![]来存储声明语句的结果。
-            let mut new_node = vec![];
-            for decl in decls {
-                // 将每一条声明语句的结果处理后都存入Vec![]中,
-                new_node.push(traverse(&decl, ctx));
-            }
-            Node::new(DeclStmt(new_node)) //返回DeclStmt语义的节点
-        }
-
         /* variable, eg: int a[3][3] = {{1,2,3},{4,5,6},{7,8,9}}, local */
         Decl(basic_type, name, dims, inits, scope) => {
             let mut ty = basic_type.clone();
@@ -296,12 +279,15 @@ fn traverse(node: &Node, ctx: &mut Runtime) -> Node {
             ctx.insert(name.clone(), ty, new_node.clone());
             new_node
         }
-
-        /* 根据给定的名称和索引, 在环境中查找相应的变量或数组, 并根据结果作不同的处理. */
-        /* 具体来说, 如果是变量, 则根据其基本类型的不同进行处理, 然后返回一个新节点,
-           相对应的, 如果是数组, 则根据索引和数组维度的长度进行判断, 处理完后返回一个新节点.
-           这些节点都是经过语义分析后初步带有类型,语义信息的 "Anotated AST Node".
-        */
+        DeclStmt(decls) => {
+            // 用Vec![]来存储声明语句的结果。
+            let mut new_node = vec![];
+            for decl in decls {
+                // 将每一条声明语句的结果处理后都存入Vec![]中,
+                new_node.push(traverse(&decl, ctx));
+            }
+            Node::new(DeclStmt(new_node)) //返回DeclStmt语义的节点
+        }
         Access(name, indexes, _) => {
             let (basic_type, n) = ctx.find(name, node);
             if let NodeType::Decl(_, _, _, _, _) = n.node_type {
@@ -385,91 +371,6 @@ fn traverse(node: &Node, ctx: &mut Runtime) -> Node {
                     name
                 ));
                 unreachable!()
-            }
-        }
-
-        BinOp(ttype, lhs, rhs) => {
-            let new_lhs = traverse(&lhs, ctx);
-            if new_lhs.basic_type != BasicType::Int && new_lhs.basic_type != BasicType::Const {
-                lhs.error_spot(format!(
-                    "Expression at the left of the operator should be int or const"
-                ));
-            }
-            let new_rhs = traverse(&rhs, ctx);
-            if new_rhs.basic_type != BasicType::Int && new_rhs.basic_type != BasicType::Const {
-                rhs.error_spot(format!(
-                    "Expression at the right of the operator should be int or const"
-                ));
-            }
-            if new_lhs.basic_type == BasicType::Const && new_rhs.basic_type == BasicType::Const {
-                return Node {
-                    startpos: node.startpos,
-                    endpos: node.endpos,
-                    node_type: Number(eval(node, ctx)),
-                    basic_type: BasicType::Const,
-                };
-            }
-            Node {
-                startpos: node.startpos,
-                endpos: node.endpos,
-                node_type: BinOp(ttype.clone(), Box::new(new_lhs), Box::new(new_rhs)),
-                basic_type: BasicType::Int,
-            }
-        }
-        Call(name, call_args, _) => {
-            let (_, n) = ctx.find(&name, node);
-            if let Func(ret, _, def_args, _) = &n.node_type {
-                if call_args.len() != def_args.len() {
-                    node.error_spot(format!(
-                        "Argument length of {} should be {} instead of {}",
-                        name,
-                        def_args.len(),
-                        call_args.len()
-                    ));
-                }
-                let mut new_call_args = vec![];
-                for (call_arg, def_arg) in call_args.iter().zip(def_args.iter()) {
-                    let new_call_arg = traverse(&call_arg, ctx);
-                    new_call_args.push(new_call_arg.clone());
-                    //Both int/const
-                    if let Decl(def_basic_type, _, _, _, _) = &def_arg.node_type {
-                        if def_basic_type == &BasicType::Int
-                            && (new_call_arg.basic_type == BasicType::Int
-                                || new_call_arg.basic_type == BasicType::Const)
-                        {
-                            continue;
-                        }
-                    }
-                    //Both array
-                    if let Decl(def_basic_type, _, _, _, _) = &def_arg.node_type {
-                        if let BasicType::IntArray(def_dims) = def_basic_type {
-                            if let BasicType::IntArray(call_dims) = &new_call_arg.basic_type {
-                                for (call_dim, def_dim) in
-                                    call_dims.iter().zip(def_dims.iter()).skip(1)
-                                {
-                                    if call_dim != def_dim {
-                                        call_arg.error_spot(format!(
-                                            "error_spot dimension in function call {}",
-                                            name
-                                        ));
-                                    }
-                                }
-                                continue;
-                            }
-                        }
-                    }
-                    //Others
-                    call_arg.error_spot(format!("Unmatched type in function call {}", name));
-                }
-                Node {
-                    startpos: node.startpos,
-                    endpos: node.endpos,
-                    node_type: Call(name.clone(), new_call_args, Box::new(n.clone())),
-                    basic_type: ret.clone(),
-                }
-            } else {
-                node.error_spot(format!("{} is not a function", name));
-                unreachable!();
             }
         }
         Assign(name, indexes, expr, _) => {
@@ -561,12 +462,124 @@ fn traverse(node: &Node, ctx: &mut Runtime) -> Node {
                 unreachable!()
             }
         }
+        BinOp(ttype, lhs, rhs) => {
+            let new_lhs = traverse(&lhs, ctx);
+            if new_lhs.basic_type != BasicType::Int && new_lhs.basic_type != BasicType::Const {
+                lhs.error_spot(format!(
+                    "Expression at the left of the operator should be int or const"
+                ));
+            }
+            let new_rhs = traverse(&rhs, ctx);
+            if new_rhs.basic_type != BasicType::Int && new_rhs.basic_type != BasicType::Const {
+                rhs.error_spot(format!(
+                    "Expression at the right of the operator should be int or const"
+                ));
+            }
+            if new_lhs.basic_type == BasicType::Const && new_rhs.basic_type == BasicType::Const {
+                return Node {
+                    startpos: node.startpos,
+                    endpos: node.endpos,
+                    node_type: Number(eval(node, ctx)),
+                    basic_type: BasicType::Const,
+                };
+            }
+            Node {
+                startpos: node.startpos,
+                endpos: node.endpos,
+                node_type: BinOp(ttype.clone(), Box::new(new_lhs), Box::new(new_rhs)),
+                basic_type: BasicType::Int,
+            }
+        }
+        /*---------第二类:Expression---------------*/
         ExprStmt(expr) => Node {
             startpos: node.startpos,
             endpos: node.endpos,
             node_type: ExprStmt(Box::new(traverse(expr, ctx))),
             basic_type: BasicType::Nil,
         },
+        /*---------第三类:Function-----------------*/
+        Call(name, call_args, _) => {
+            let (_, n) = ctx.find(&name, node);
+            if let Func(ret, _, def_args, _) = &n.node_type {
+                if call_args.len() != def_args.len() {
+                    node.error_spot(format!(
+                        "Argument length of {} should be {} instead of {}",
+                        name,
+                        def_args.len(),
+                        call_args.len()
+                    ));
+                }
+                let mut new_call_args = vec![];
+                for (call_arg, def_arg) in call_args.iter().zip(def_args.iter()) {
+                    let new_call_arg = traverse(&call_arg, ctx);
+                    new_call_args.push(new_call_arg.clone());
+                    //Both int/const
+                    if let Decl(def_basic_type, _, _, _, _) = &def_arg.node_type {
+                        if def_basic_type == &BasicType::Int
+                            && (new_call_arg.basic_type == BasicType::Int
+                                || new_call_arg.basic_type == BasicType::Const)
+                        {
+                            continue;
+                        }
+                    }
+                    //Both array
+                    if let Decl(def_basic_type, _, _, _, _) = &def_arg.node_type {
+                        if let BasicType::IntArray(def_dims) = def_basic_type {
+                            if let BasicType::IntArray(call_dims) = &new_call_arg.basic_type {
+                                for (call_dim, def_dim) in
+                                    call_dims.iter().zip(def_dims.iter()).skip(1)
+                                {
+                                    if call_dim != def_dim {
+                                        call_arg.error_spot(format!(
+                                            "error_spot dimension in function call {}",
+                                            name
+                                        ));
+                                    }
+                                }
+                                continue;
+                            }
+                        }
+                    }
+                    //Others
+                    call_arg.error_spot(format!("Unmatched type in function call {}", name));
+                }
+                Node {
+                    startpos: node.startpos,
+                    endpos: node.endpos,
+                    node_type: Call(name.clone(), new_call_args, Box::new(n.clone())),
+                    basic_type: ret.clone(),
+                }
+            } else {
+                node.error_spot(format!("{} is not a function", name));
+                unreachable!();
+            }
+        }
+        Func(ret, name, args, body) => {
+            ctx.set_cur_func(name, ret);
+            let mut new_args = vec![];
+            ctx.enter_scope();
+            for arg in args {
+                new_args.push(traverse(arg, ctx));
+            }
+            ctx.insert(
+                name.clone(),
+                BasicType::Func(Box::new(ret.clone())),
+                Node::new(NodeType::Func(
+                    ret.clone(),
+                    name.clone(),
+                    new_args.clone(),
+                    body.clone(),
+                )),
+            );
+            let new_body = traverse(body, ctx);
+            ctx.exit_scope();
+            Node {
+                startpos: node.startpos,
+                endpos: node.endpos,
+                node_type: Func(ret.clone(), name.clone(), new_args, Box::new(new_body)),
+                basic_type: BasicType::Nil,
+            }
+        }
         Block(stmts) => {
             ctx.enter_scope();
             let mut new_stmts = vec![];
@@ -581,6 +594,32 @@ fn traverse(node: &Node, ctx: &mut Runtime) -> Node {
                 basic_type: BasicType::Nil,
             }
         }
+        Return(expr) => {
+            let new_expr: Option<Box<Node>>;
+            let mut ret_type: BasicType;
+            let (name, ret) = ctx.get_cur_func();
+            if let Some(exp) = expr {
+                let new_exp = traverse(exp, ctx);
+                ret_type = new_exp.basic_type.clone();
+                new_expr = Some(Box::new(new_exp));
+            } else {
+                ret_type = BasicType::Void;
+                new_expr = None;
+            }
+            if ret_type == BasicType::Const {
+                ret_type = BasicType::Int;
+            }
+            if ret_type != ret {
+                node.error_spot(format!("Return type of {} does not match", name));
+            }
+            Node {
+                startpos: node.startpos,
+                endpos: node.endpos,
+                node_type: Return(new_expr),
+                basic_type: BasicType::Nil,
+            }
+        }
+        /*---------第四类:Control flow-------------*/
         If(cond, on_true, on_false) => {
             let new_cond = traverse(cond, ctx);
             if new_cond.basic_type != BasicType::Int && new_cond.basic_type != BasicType::Const {
@@ -617,56 +656,17 @@ fn traverse(node: &Node, ctx: &mut Runtime) -> Node {
                 basic_type: BasicType::Nil,
             }
         }
-        Return(expr) => {
-            let new_expr: Option<Box<Node>>;
-            let mut ret_type: BasicType;
-            let (name, ret) = ctx.get_cur_func();
-            if let Some(exp) = expr {
-                let new_exp = traverse(exp, ctx);
-                ret_type = new_exp.basic_type.clone();
-                new_expr = Some(Box::new(new_exp));
-            } else {
-                ret_type = BasicType::Void;
-                new_expr = None;
+        Break => {
+            if !ctx.is_in_loop() {
+                node.error_spot(format!("Break should in a loop"));
             }
-            if ret_type == BasicType::Const {
-                ret_type = BasicType::Int;
-            }
-            if ret_type != ret {
-                node.error_spot(format!("Return type of {} does not match", name));
-            }
-            Node {
-                startpos: node.startpos,
-                endpos: node.endpos,
-                node_type: Return(new_expr),
-                basic_type: BasicType::Nil,
-            }
+            node.clone() //返回带Break语义的节点
         }
-        Func(ret, name, args, body) => {
-            ctx.set_cur_func(name, ret);
-            let mut new_args = vec![];
-            ctx.enter_scope();
-            for arg in args {
-                new_args.push(traverse(arg, ctx));
+        Continue => {
+            if !ctx.is_in_loop() {
+                node.error_spot(format!("Continue should in a loop"));
             }
-            ctx.insert(
-                name.clone(),
-                BasicType::Func(Box::new(ret.clone())),
-                Node::new(NodeType::Func(
-                    ret.clone(),
-                    name.clone(),
-                    new_args.clone(),
-                    body.clone(),
-                )),
-            );
-            let new_body = traverse(body, ctx);
-            ctx.exit_scope();
-            Node {
-                startpos: node.startpos,
-                endpos: node.endpos,
-                node_type: Func(ret.clone(), name.clone(), new_args, Box::new(new_body)),
-                basic_type: BasicType::Nil,
-            }
+            node.clone() //返回带Continue语义的节点
         }
         _ => unreachable!(),
     }

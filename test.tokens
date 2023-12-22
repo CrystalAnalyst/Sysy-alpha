@@ -13,20 +13,22 @@ Token{	line:3	type:Int	value:"int"	}
 TokenNo:6
 Token{	line:3	type:Identifier("i")	value:"i"	}
 TokenNo:7
-Token{	line:3	type:Assign	value:"="	}
+Token{	line:3	type:Comma	value:","	}
 TokenNo:8
-Token{	line:3	type:IntNumber(83)	value:""	}
+Token{	line:3	type:Identifier("j")	value:"j"	}
 TokenNo:9
 Token{	line:3	type:Semicolon	value:";"	}
 TokenNo:10
 Token{	line:4	type:Int	value:"int"	}
 TokenNo:11
-Token{	line:4	type:Identifier("j")	value:"j"	}
+Token{	line:4	type:Identifier("i")	value:"i"	}
 TokenNo:12
-Token{	line:4	type:Assign	value:"="	}
-TokenNo:13
-Token{	line:4	type:IntNumber(63)	value:""	}
-TokenNo:14
 Token{	line:4	type:Semicolon	value:";"	}
+TokenNo:13
+Token{	line:5	type:Return	value:"return"	}
+TokenNo:14
+Token{	line:5	type:IntNumber(0)	value:""	}
 TokenNo:15
-Token{	line:5	type:RightBrace	value:"}"	}
+Token{	line:5	type:Semicolon	value:";"	}
+TokenNo:16
+Token{	line:6	type:RightBrace	value:"}"	}
