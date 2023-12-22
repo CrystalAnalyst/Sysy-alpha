@@ -13,7 +13,6 @@ enum CharType {
 }
 
 /*----------------About token-----------------*/
-
 #[derive(Clone)]
 pub struct Token {
     /*
@@ -31,7 +30,7 @@ pub struct Token {
     pub endpos: usize,
 }
 
-/* 实现Debug trait, 让Token可以被打印到控制台或者指定文件. */
+/* 实现Debug trait, 让Token可以使用{:?}被打印到控制台或者指定文件. */
 impl std::fmt::Debug for Token {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         //get token content
@@ -40,18 +39,8 @@ impl std::fmt::Debug for Token {
         write!(
             f,
             "Token{{\tline:{:?}\ttype:{:?}\tvalue:{:?}\t}}",
-            self.line_no,
-            self.sort,
-            content,
-            /*
-                self.startpos - *self.line_start, //开始列号.
-                self.endpos - *self.line_start    //结束列号.
-            */
+            self.line_no, self.sort, content,
         )
-        /*
-            返回一个Result, 这个Result是什么? 它是一个枚举类型, 它有两个值, Ok和Err.
-            Ok表示成功, 而Err表示失败. 我们这里返回的是Ok, 所以返回Ok(())
-        */
     }
 }
 
@@ -93,7 +82,6 @@ impl Lexer {
     /*
         奥卡姆剃刀原理：如非必要,勿增实体
         下列只列出Lexer必须实现的方法,
-
         tips:Rust的impl struct相当于Go的interface, 可以“类比”C++中写在对象内部的成员函数.
         impl struct是一系列方法签名, 相当于是为这个struct对象定义了一系列行为(Action).
         在impl中, Self表示结构体类型, self表示结构体的实例,
@@ -106,7 +94,7 @@ impl Lexer {
             chars: Rc::new(Self::get_source(&path)),
             current: 0,
             line_starts: vec![0],
-            line_no: 1,     //调研各大IDE, 行号都是从1开始.
+            line_no: 1,     //各IDE,行号都是从1开始.
             tokens: vec![], //用于存放提取出来的token。
             source: path,
             is_panicked: false,
@@ -129,14 +117,10 @@ impl Lexer {
     /* 读取文件内容 */
     fn get_source(path: &str) -> Vec<char> {
         let mut content = String::new();
-        /*
-            type_check用于错误处理, Rust中没有Java/Cpp中Try-Catch的结构,
-            用type_check来表明错误, 如果有错, 则会输出type_check括号中的内容, 没错则会无视。
-        */
         let mut file = File::open(path).expect("File cannot be opened");
         file.read_to_string(&mut content)
             .expect("File cannot be converted to string");
-        // rust的编码是unicode(utf-8), 不支持字符串用下标访问, 必须把字符串转换为字符数组.
+        // rust的编码是unicode(utf-8), 不支持字符串用下标访问, !:必须把字符串转换为字符数组.
         // 注意: 这里的chars()是迭代器, 不是数组, 所以访问单个字符的时候用方法get(). 范式为:chars.get()
         content.chars().collect()
     }
@@ -170,14 +154,11 @@ impl Lexer {
 
     fn parse_decimal(&mut self) {
         let start = self.current; // Store the initial value of self.current
-
-        // Parse the integer part
         let mut integer_sum = 0;
         let mut integer_len = 0;
         let mut fraction_sum = 0;
         let mut fraction_len = 0;
         let mut is_float = false;
-
         for c in self.chars[self.current..].iter() {
             if let Some(val) = c.to_digit(10) {
                 if is_float {
@@ -193,15 +174,12 @@ impl Lexer {
                 break;
             }
         }
-
         if is_float && fraction_len > 0 {
             // Calculate the floating-point value
             let float_value =
                 integer_sum as f64 + fraction_sum as f64 / 10_f64.powi(fraction_len as i32);
-
             // Update the current position after the number
             self.current = start + integer_len + fraction_len + 1;
-
             // Create a token for the floating-point number
             let mut t = self.new_token(TokenType::FloatNumber(float_value as f32));
             t.endpos = self.current;
@@ -209,10 +187,8 @@ impl Lexer {
         } else {
             // Calculate the integer value
             let int_value = integer_sum;
-
             // Update the current position after the number
             self.current = start + integer_len;
-
             // Create a token for the integer number
             let mut t = self.new_token(TokenType::IntNumber(int_value as i32));
             t.endpos = self.current;
@@ -224,7 +200,7 @@ impl Lexer {
         let light = match base {
             8 => 1,
             16 => 2,
-            _ => 3,
+            _ => unreachable!(),
         };
         let mut sum = 0;
         let mut len = 0;
@@ -251,8 +227,6 @@ impl Lexer {
                             "Lexer error: Illegal HEXIDECIMAL number",
                             "Error type A at this line: Illegal hexadecimal number",
                         );
-                    } else {
-                        self.error("Lexer error: Illegal number", "Error type A at this line");
                     }
                 }
                 break;
@@ -265,101 +239,13 @@ impl Lexer {
             t.endpos = self.current;
             self.tokens.push(t);
         } else {
-            let mut t = self.new_token(TokenType::WrongFormat("进制表示不合法!".into()));
+            let mut t = self.new_token(TokenType::WrongFormat(
+                "Wrong Oct/Hex representation!".into(),
+            ));
             t.endpos = self.current;
             self.tokens.push(t);
         }
     }
-
-    /*
-        fn get_real_number(&mut self) {
-            /* 用于区分浮点数和整数, 其中'.'算作浮点数的一部分 */
-            let setoff = self.current;
-            let mut cur = self.chars.get(self.current);
-            /* 对当前拿到的cur进行检查, 如果cur代表数字则往后遍历, 否则停下 */
-            while cur.map_or(false, |c| c.is_ascii_digit()) {
-                self.current += 1;
-                cur = self.chars.get(self.current);
-            }
-            self.current = setoff;
-            if cur == Some(&'.') {
-                //println!("find the float number!");
-                self.parse_float();
-            } else {
-                //println!("find the integer number!");
-                self.scan_number();
-            }
-        }
-
-        fn parse_float(&mut self) {
-            /* 将字符串表示的浮点数转化为f32浮点数 */
-            let mut float_str: Vec<char> = Vec::new();
-            let mut cur = self.chars.get(self.current);
-            /* 对当前拿到的cur进行检查, 如果cur不为空, 则继续, 否则停下. */
-            while cur.is_some()
-                && (*cur.unwrap() == '.' || (*cur.unwrap() >= '0' && *cur.unwrap() <= '9'))
-            {
-                float_str.push(*cur.unwrap());
-                self.current += 1;
-                cur = self.chars.get(self.current);
-            }
-
-            let mut s = String::new();
-            for c in float_str {
-                s.push(c);
-            }
-
-            // 把Vec<char>中的字符拼起来转换为f32类型放入sum中.
-            let sum = s.parse::<f32>().unwrap();
-            let mut t = self.new_token(TokenType::FloatNumber(sum));
-            t.endpos = self.current;
-            self.tokens.push(t);
-        }
-
-        /* 扫描数字,并根据不同进制进行处理. */
-        fn scan_number(&mut self) {
-            match self.chars.get(self.current..self.current + 2) {
-                //若是以0x(0X)开头, 则说明是十六进制数.
-                Some(&['0', 'x']) | Some(&['0', 'X']) => {
-                    self.current += 2;
-                    self.parse_number(16);
-                }
-                //若是以0开头,则说明是八进制数(参考C语言的规范).
-                Some(&['0', _]) => {
-                    self.parse_number(8);
-                }
-                //否则就是十进制数.
-                _ => self.parse_number(10),
-            }
-        }
-
-        /* 根据进制计算数字的值,将"值信息"放入token中,再将token推入tokens(存放token的向量)中. */
-        fn parse_number(&mut self, base: u32) {
-            let mut sum = 0;
-            let mut len = 0;
-            for c in self.chars[self.current..].iter() {
-                if let Some(val) = c.to_digit(base) {
-                    if base == 16 {
-                        if !['A', 'B', 'C', 'D', 'E', 'F'].contains(&c) {
-                            println!("Invalid character: {}", c);
-                        } else {
-                            sum = sum * base as i32 + val as i32;
-                            len += 1;
-                        }
-                    }
-                    if base == 8 {
-
-                    }
-                } else {
-                    break;
-                }
-            }
-            let mut t = self.new_token(TokenType::IntNumber(sum));
-            self.current += len;
-            t.endpos = self.current;
-            self.tokens.push(t);
-        }
-    */
 
     /*
         扫描标识符, 并判断是否是关键字.
@@ -367,10 +253,10 @@ impl Lexer {
         step1. 提取出标识符的name, 它可能是关键字, 也可能是标识符.
         step2. 把name与预先做好的关键字表进行匹配, 匹配到了就是关键字.
         step3. 遍历关键字表完了都没匹配上, 就是真正意义上的标识符.
-        tips: 不顾按时标识符还是关键字, 识别好了都得new一个token出来把它们信息装好后推入tokens.
+        tips: 不管是标识符还是关键字, 识别好了都得new一个token出来把它们信息装好后推入tokens.
     */
     fn scan_identifier(&mut self, keywords: &HashMap<String, TokenType>) {
-        //step1.
+        //step1. name got
         let mut len = 1;
         while let Some(c) = self.chars.get(self.current + len) {
             //读取一个字符到变量c, 然后对c进行判断, 如果是标识符三要素: 字母, 数字, 下划线则继续
@@ -383,15 +269,15 @@ impl Lexer {
         let name: String = self.chars[self.current..self.current + len]
             .iter()
             .collect();
-        //step2.
+        //step2. Keyword ?
         let mut t: Token;
         if let Some(sort) = keywords.get(&name) {
             t = self.new_token(sort.clone())
         } else {
-            //step3.
+            //step3. Identifier!
             t = self.new_token(TokenType::Identifier(name))
         }
-        //add to tokens.
+        //step4. add to tokens.
         self.current += len;
         t.endpos = self.current; //更新当前Token的end字段位置
         self.tokens.push(t); //把识别到的token加入tokens中, 这就是词法分析的根本目的嘛！
@@ -435,7 +321,7 @@ impl Lexer {
         );
     }
 
-    /* 用于处理报错信息, 完全自定义 */
+    /* 用于处理Lexical Analysis阶段的报错信息 */
     fn error(&mut self, msg: &str, suggest: &str) {
         /* step1. collect error info */
         let mut len = 0;
@@ -574,14 +460,10 @@ pub fn tokenize(path: String) -> Vec<Token> {
        0.这是一个库函数(暴露给外界), 库函数一般是封装内部对象的实例函数, 所以需要先new一个对象,再调用该对象的方法.
        1."tokenize"这个动作的执行者是Lexer, 先New一个Lexer作为执行词法分析的实体.
        2.调用Lexer的成员函数scan(),扫描整个文件,把扫描到的一个个词法单元装入lexer.tokens中.
-       3.如果在scan的过程中有错误(在lexer中设置了检查panic的字段),则结束程序.
-       4.没有panic则正常结束, tokens读取完毕, 返回lexer.tokens
+       3.返回tokens
     */
     let mut lexer = Lexer::new(Rc::new(path));
     lexer.scan(&keyword_table_init(), &double_sign_table_init());
-    /*  if lexer.is_panicked {
-        panic!("Lexer paniced!");
-    } */
     lexer.tokens
 }
 

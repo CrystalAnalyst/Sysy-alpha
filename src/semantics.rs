@@ -86,7 +86,7 @@ impl Runtime {
             }
         }
 
-        // step2. Check for redefined variables
+        // step2. Check for redefined global variables
         if matches!(node.node_type, NodeType::Decl(..)) {
             if self.local.is_empty() {
                 if let Some(val) = self.global.get(&name) {
@@ -113,37 +113,6 @@ impl Runtime {
                 .insert(name, Var::new(basic_type, node));
         }
     }
-
-    /*
-    fn insert(&mut self, name: String, basic_type: BasicType, node: Node) {
-        // step1.检查定义过的变量
-        if matches!(node.node_type, NodeType::Decl(..)) {
-            if self.local.is_empty() {
-                if let Some(val) = self.global.get(&name) {
-                    if matches!(val.node.node_type, NodeType::Decl(..)) {
-                        if matches!(val.node.basic_type, BasicType::Func(..)) {
-                            node.error_spot(format!("redefined function in this: `{:?}`.", name));
-                        } else {
-                            node.error_spot(format!("redefined global variable: `{:?}`.", name));
-                        }
-                    }
-                }
-            } else {
-                if self.local.last().unwrap().contains_key(&name) {
-                    node.error_spot(format!("redefined variable: `{:?}` in this scope!", name));
-                }
-            }
-        }
-        // step2.插入全局或者当前作用域
-        if self.local.is_empty() || matches!(node.node_type, NodeType::Func(..)) {
-            self.global.insert(name, Var::new(basic_type, node));
-        } else {
-            self.local
-                .last_mut()
-                .unwrap()
-                .insert(name, Var::new(basic_type, node));
-        }
-    }*/
 
     fn find(&self, name: &String, node: &Node) -> (BasicType, Node) {
         // step1. 从当前局部作用域往回查找
