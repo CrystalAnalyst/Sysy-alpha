@@ -80,7 +80,10 @@ impl Runtime {
         if matches!(node.node_type, NodeType::Func(..)) {
             if let Some(val) = self.global.get(&name) {
                 if matches!(val.node.node_type, NodeType::Func(..)) {
-                    node.error_spot(format!("function `{}` has already defined here!", name));
+                    node.error_spot(format!(
+                        "Error type 4 at this line: function `{}` has already defined here!",
+                        name
+                    ));
                     return;
                 }
             }
@@ -91,14 +94,20 @@ impl Runtime {
             if self.local.is_empty() {
                 if let Some(val) = self.global.get(&name) {
                     if !matches!(node.node_type, NodeType::Func(..)) {
-                        node.error_spot(format!("redefined global variable: `{}`.", name));
+                        node.error_spot(format!(
+                            "Error type 2 at this line: redefined global variable: `{}`.",
+                            name
+                        ));
                         return;
                     }
                 }
             }
         } else {
             if self.local.last().unwrap().contains_key(&name) {
-                node.error_spot(format!("redefined variable: `{}` in this scope!", name));
+                node.error_spot(format!(
+                    "Error type 2 at this line: redefined variable: `{}` in this scope!",
+                    name
+                ));
                 return;
             }
         }
@@ -128,10 +137,16 @@ impl Runtime {
             // 根据node的类型是函数还是其它分别输出不同的信息
             match node.basic_type {
                 BasicType::Func(..) => {
-                    node.error_spot(format!("function {:?} is not defined!", name.clone()));
+                    node.error_spot(format!(
+                        "Error type 3 at this line: undefined function `{:?}`",
+                        name.clone()
+                    ));
                 }
                 _ => {
-                    node.error_spot(format!("variable {:?} is not defined!", name.clone()));
+                    node.error_spot(format!(
+                        "Error type 1 at this line: undefined variable {:?}.",
+                        name.clone()
+                    ));
                 }
             }
             unreachable!();
@@ -412,7 +427,7 @@ fn traverse(node: &Node, ctx: &mut Runtime) -> Node {
                     BasicType::Int => {
                         if indexes.is_some() {
                             node.error_spot(format!(
-                                "Integer {} should not have indexes in assign",
+                                "Error type 8 at this line: Integer {} should not have indexes in assign",
                                 name
                             ));
                         }
@@ -420,7 +435,9 @@ fn traverse(node: &Node, ctx: &mut Runtime) -> Node {
                         if new_expr.basic_type != BasicType::Int
                             && new_expr.basic_type != BasicType::Const
                         {
-                            node.error_spot(format!("Should assign int/const to int"))
+                            node.error_spot(format!(
+                                "Error type 7 at this line: Should assign int/const to int"
+                            ))
                         }
                         Node {
                             startpos: node.startpos,
@@ -486,7 +503,10 @@ fn traverse(node: &Node, ctx: &mut Runtime) -> Node {
                     _ => unreachable!(),
                 }
             } else {
-                node.error_spot(format!("Cannot assign to function {}", name));
+                node.error_spot(format!(
+                    "Error type 6 at this line: Cannot assign to function `{}`",
+                    name
+                ));
                 unreachable!()
             }
         }
@@ -494,13 +514,13 @@ fn traverse(node: &Node, ctx: &mut Runtime) -> Node {
             let new_lhs = traverse(&lhs, ctx);
             if new_lhs.basic_type != BasicType::Int && new_lhs.basic_type != BasicType::Const {
                 lhs.error_spot(format!(
-                    "Expression at the left of the operator should be int or const"
+                    "Error type 11 at this line:Expression at the left of the operator should match each other"
                 ));
             }
             let new_rhs = traverse(&rhs, ctx);
             if new_rhs.basic_type != BasicType::Int && new_rhs.basic_type != BasicType::Const {
                 rhs.error_spot(format!(
-                    "Expression at the right of the operator should be int or const"
+                    "Error type 11 at this line:Expression at the right of the operator should be match each other"
                 ));
             }
             if new_lhs.basic_type == BasicType::Const && new_rhs.basic_type == BasicType::Const {
@@ -531,7 +551,7 @@ fn traverse(node: &Node, ctx: &mut Runtime) -> Node {
             if let Func(ret, _, def_args, _) = &n.node_type {
                 if call_args.len() != def_args.len() {
                     node.error_spot(format!(
-                        "Argument length of {} should be {} instead of {}",
+                        "Error type 9 at this line: Argument length of {} should be {} instead of {}",
                         name,
                         def_args.len(),
                         call_args.len()
@@ -569,7 +589,10 @@ fn traverse(node: &Node, ctx: &mut Runtime) -> Node {
                         }
                     }
                     //Others
-                    call_arg.error_spot(format!("Unmatched type in function call {}", name));
+                    call_arg.error_spot(format!(
+                        "Error type 10 at this line: Unmatched type in function call {}",
+                        name
+                    ));
                 }
                 Node {
                     startpos: node.startpos,
@@ -578,7 +601,10 @@ fn traverse(node: &Node, ctx: &mut Runtime) -> Node {
                     basic_type: ret.clone(),
                 }
             } else {
-                node.error_spot(format!("{} is not a function", name));
+                node.error_spot(format!(
+                    "Error type 5 at this line: {} is not a function!",
+                    name
+                ));
                 unreachable!();
             }
         }
@@ -686,13 +712,17 @@ fn traverse(node: &Node, ctx: &mut Runtime) -> Node {
         }
         Break => {
             if !ctx.is_in_loop() {
-                node.error_spot(format!("Break should in a loop"));
+                node.error_spot(format!(
+                    "Error type 12 at this line: Break should in a loop"
+                ));
             }
             node.clone() //返回带Break语义的节点
         }
         Continue => {
             if !ctx.is_in_loop() {
-                node.error_spot(format!("Continue should in a loop"));
+                node.error_spot(format!(
+                    "Error type 13 at this line: Continue should in a loop"
+                ));
             }
             node.clone() //返回带Continue语义的节点
         }

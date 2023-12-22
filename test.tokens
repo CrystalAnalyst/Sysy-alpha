@@ -7,114 +7,34 @@ Token{	line:1	type:LeftParen	value:"("	}
 TokenNo:3
 Token{	line:1	type:RightParen	value:")"	}
 TokenNo:4
-Token{	line:1	type:LeftBrace	value:"{"	}
+Token{	line:2	type:LeftBrace	value:"{"	}
 TokenNo:5
-Token{	line:2	type:Int	value:"int"	}
-TokenNo:6
-Token{	line:2	type:Identifier("a")	value:"a"	}
-TokenNo:7
-Token{	line:2	type:Assign	value:"="	}
-TokenNo:8
-Token{	line:2	type:IntNumber(1)	value:""	}
-TokenNo:9
-Token{	line:2	type:Semicolon	value:";"	}
-TokenNo:10
 Token{	line:3	type:Int	value:"int"	}
-TokenNo:11
-Token{	line:3	type:Identifier("arr")	value:"arr"	}
-TokenNo:12
-Token{	line:3	type:LeftBracket	value:"["	}
-TokenNo:13
-Token{	line:3	type:IntNumber(3)	value:""	}
-TokenNo:14
-Token{	line:3	type:RightBracket	value:"]"	}
-TokenNo:15
-Token{	line:3	type:LeftBracket	value:"["	}
-TokenNo:16
-Token{	line:3	type:IntNumber(3)	value:""	}
-TokenNo:17
-Token{	line:3	type:RightBracket	value:"]"	}
-TokenNo:18
+TokenNo:6
+Token{	line:3	type:Identifier("i")	value:"i"	}
+TokenNo:7
 Token{	line:3	type:Assign	value:"="	}
-TokenNo:19
-Token{	line:3	type:LeftBrace	value:"{"	}
-TokenNo:20
-Token{	line:3	type:LeftBrace	value:"{"	}
-TokenNo:21
-Token{	line:3	type:IntNumber(0)	value:""	}
-TokenNo:22
-Token{	line:3	type:Comma	value:","	}
-TokenNo:23
+TokenNo:8
 Token{	line:3	type:IntNumber(1)	value:""	}
-TokenNo:24
-Token{	line:3	type:Comma	value:","	}
-TokenNo:25
-Token{	line:3	type:IntNumber(2)	value:""	}
-TokenNo:26
-Token{	line:3	type:RightBrace	value:"}"	}
-TokenNo:27
-Token{	line:3	type:Comma	value:","	}
-TokenNo:28
-Token{	line:3	type:LeftBrace	value:"{"	}
-TokenNo:29
-Token{	line:3	type:IntNumber(3)	value:""	}
-TokenNo:30
-Token{	line:3	type:Comma	value:","	}
-TokenNo:31
-Token{	line:3	type:IntNumber(4)	value:""	}
-TokenNo:32
-Token{	line:3	type:Comma	value:","	}
-TokenNo:33
-Token{	line:3	type:IntNumber(5)	value:""	}
-TokenNo:34
-Token{	line:3	type:RightBrace	value:"}"	}
-TokenNo:35
-Token{	line:3	type:Comma	value:","	}
-TokenNo:36
-Token{	line:3	type:LeftBrace	value:"{"	}
-TokenNo:37
-Token{	line:3	type:IntNumber(6)	value:""	}
-TokenNo:38
-Token{	line:3	type:Comma	value:","	}
-TokenNo:39
-Token{	line:3	type:IntNumber(7)	value:""	}
-TokenNo:40
-Token{	line:3	type:Comma	value:","	}
-TokenNo:41
-Token{	line:3	type:IntNumber(8)	value:""	}
-TokenNo:42
-Token{	line:3	type:RightBrace	value:"}"	}
-TokenNo:43
-Token{	line:3	type:RightBrace	value:"}"	}
-TokenNo:44
+TokenNo:9
 Token{	line:3	type:Semicolon	value:";"	}
-TokenNo:45
-Token{	line:4	type:Float	value:"float"	}
-TokenNo:46
-Token{	line:4	type:Identifier("b")	value:"b"	}
-TokenNo:47
+TokenNo:10
+Token{	line:4	type:Identifier("j")	value:"j"	}
+TokenNo:11
 Token{	line:4	type:Assign	value:"="	}
-TokenNo:48
-Token{	line:4	type:FloatNumber(3.14)	value:""	}
-TokenNo:49
+TokenNo:12
+Token{	line:4	type:Identifier("i")	value:"i"	}
+TokenNo:13
+Token{	line:4	type:Plus	value:"+"	}
+TokenNo:14
+Token{	line:4	type:IntNumber(1)	value:""	}
+TokenNo:15
 Token{	line:4	type:Semicolon	value:";"	}
-TokenNo:50
-Token{	line:5	type:Const	value:"const"	}
-TokenNo:51
-Token{	line:5	type:Int	value:"int"	}
-TokenNo:52
-Token{	line:5	type:Identifier("x")	value:"x"	}
-TokenNo:53
-Token{	line:5	type:Assign	value:"="	}
-TokenNo:54
-Token{	line:5	type:IntNumber(20)	value:""	}
-TokenNo:55
+TokenNo:16
+Token{	line:5	type:Return	value:"return"	}
+TokenNo:17
+Token{	line:5	type:IntNumber(0)	value:""	}
+TokenNo:18
 Token{	line:5	type:Semicolon	value:";"	}
-TokenNo:56
-Token{	line:6	type:Return	value:"return"	}
-TokenNo:57
-Token{	line:6	type:IntNumber(0)	value:""	}
-TokenNo:58
-Token{	line:6	type:Semicolon	value:";"	}
-TokenNo:59
-Token{	line:7	type:RightBrace	value:"}"	}
+TokenNo:19
+Token{	line:6	type:RightBrace	value:"}"	}
