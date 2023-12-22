@@ -101,6 +101,7 @@ impl Parser {
         let result = match t.sort {
             TokenType::Void => Some(BasicType::Void),
             TokenType::Int => Some(BasicType::Int),
+            TokenType::Float => Some(BasicType::Float),
             TokenType::Const => {
                 self.type_check(TokenType::Int); //从这里你可以看出Const是怎么被解析的, 读一个Const马上要读一个Int.
                 Some(BasicType::Const)
@@ -291,6 +292,10 @@ impl Parser {
                 }
             }
             TokenType::Int | TokenType::Const => {
+                self.current -= 1;
+                self.decl_stmt(Scope::Local)
+            }
+            TokenType::Float => {
                 self.current -= 1;
                 self.decl_stmt(Scope::Local)
             }

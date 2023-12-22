@@ -163,8 +163,60 @@ impl Lexer {
             Some(&['0', _]) => {
                 self.parse_number(8);
             }
-            //否则就是十进制数.
-            _ => self.parse_number(10),
+            //否则就是十进制数, 10进制数又分10进制整数和10进制浮点数.
+            _ => self.parse_decimal(),
+        }
+    }
+
+    fn parse_decimal(&mut self) {
+        let start = self.current; // Store the initial value of self.current
+
+        // Parse the integer part
+        let mut integer_sum = 0;
+        let mut integer_len = 0;
+        let mut fraction_sum = 0;
+        let mut fraction_len = 0;
+        let mut is_float = false;
+
+        for c in self.chars[self.current..].iter() {
+            if let Some(val) = c.to_digit(10) {
+                if is_float {
+                    fraction_sum = fraction_sum * 10 + val;
+                    fraction_len += 1;
+                } else {
+                    integer_sum = integer_sum * 10 + val;
+                    integer_len += 1;
+                }
+            } else if *c == '.' {
+                is_float = true;
+            } else {
+                break;
+            }
+        }
+
+        if is_float && fraction_len > 0 {
+            // Calculate the floating-point value
+            let float_value =
+                integer_sum as f64 + fraction_sum as f64 / 10_f64.powi(fraction_len as i32);
+
+            // Update the current position after the number
+            self.current = start + integer_len + fraction_len + 1;
+
+            // Create a token for the floating-point number
+            let mut t = self.new_token(TokenType::FloatNumber(float_value as f32));
+            t.endpos = self.current;
+            self.tokens.push(t);
+        } else {
+            // Calculate the integer value
+            let int_value = integer_sum;
+
+            // Update the current position after the number
+            self.current = start + integer_len;
+
+            // Create a token for the integer number
+            let mut t = self.new_token(TokenType::IntNumber(int_value as i32));
+            t.endpos = self.current;
+            self.tokens.push(t);
         }
     }
 

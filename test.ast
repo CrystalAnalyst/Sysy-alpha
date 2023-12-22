@@ -1,4 +1,10 @@
 |Func main,returns Int
 |--Block
+|----DeclStmt
+|------Declare of a(Float) in Local scope
+|--------FloatNumber 3.14
+|----DeclStmt
+|------Declare of b(Int) in Local scope
+|--------Number 2
 |----Return
 |------Number 0

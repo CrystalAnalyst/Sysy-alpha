@@ -209,6 +209,11 @@ fn traverse(node: &Node, ctx: &mut Runtime) -> Node {
             new_node.basic_type = BasicType::Const;
             new_node //返回Const语义的节点
         }
+        FloatNumber(_) => {
+            let mut new_node = node.clone();
+            new_node.basic_type = BasicType::Float;
+            new_node
+        }
         /* variable, eg: int a[3][3] = {{1,2,3},{4,5,6},{7,8,9}}, local */
         Decl(basic_type, name, dims, inits, scope) => {
             let mut ty = basic_type.clone();
