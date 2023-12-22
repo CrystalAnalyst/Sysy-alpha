@@ -1,10 +1,19 @@
+|Func a,returns Int
+|--Declare of x(Int) in Params scope
+|--Declare of y(Int) in Params scope
+|--Block
+|----Return
+|------Binop Plus sema-check success
+|--------Access x sema-check success
+|--------Access y sema-check success
+|Func a,returns Int
+|--Declare of b(Int) in Params scope
+|--Block
+|----Return
+|------Access b sema-check success
 |Func main,returns Int
 |--Block
-|----DeclStmt
-|------Declare of a(Float) in Local scope
-|--------FloatNumber 3.14 sema-check success
-|----DeclStmt
-|------Declare of b(Int) in Local scope
+|----ExprStmt
+|------Function call a sema-check success
+|--------Number 1 sema-check success
 |--------Number 2 sema-check success
-|----Return
-|------Number 0 sema-check success

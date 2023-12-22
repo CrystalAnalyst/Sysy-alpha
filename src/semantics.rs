@@ -76,13 +76,53 @@ impl Runtime {
 
     ///将node节点(代表变量或者函数)新增到全局表或者当前作用域中。
     fn insert(&mut self, name: String, basic_type: BasicType, node: Node) {
+        // step1. Check if a function with the same name exists
+        if matches!(node.node_type, NodeType::Func(..)) {
+            if let Some(val) = self.global.get(&name) {
+                if matches!(val.node.node_type, NodeType::Func(..)) {
+                    node.error_spot(format!("function `{}` has already defined here!", name));
+                    return;
+                }
+            }
+        }
+
+        // step2. Check for redefined variables
+        if matches!(node.node_type, NodeType::Decl(..)) {
+            if self.local.is_empty() {
+                if let Some(val) = self.global.get(&name) {
+                    if !matches!(node.node_type, NodeType::Func(..)) {
+                        node.error_spot(format!("redefined global variable: `{}`.", name));
+                        return;
+                    }
+                }
+            }
+        } else {
+            if self.local.last().unwrap().contains_key(&name) {
+                node.error_spot(format!("redefined variable: `{}` in this scope!", name));
+                return;
+            }
+        }
+
+        // step3. Insert into the global or current scope
+        if self.local.is_empty() || matches!(node.node_type, NodeType::Func(..)) {
+            self.global.insert(name, Var::new(basic_type, node));
+        } else {
+            self.local
+                .last_mut()
+                .unwrap()
+                .insert(name, Var::new(basic_type, node));
+        }
+    }
+
+    /*
+    fn insert(&mut self, name: String, basic_type: BasicType, node: Node) {
         // step1.检查定义过的变量
         if matches!(node.node_type, NodeType::Decl(..)) {
             if self.local.is_empty() {
                 if let Some(val) = self.global.get(&name) {
                     if matches!(val.node.node_type, NodeType::Decl(..)) {
                         if matches!(val.node.basic_type, BasicType::Func(..)) {
-                            node.error_spot(format!("redefined function: `{:?}`.", name));
+                            node.error_spot(format!("redefined function in this: `{:?}`.", name));
                         } else {
                             node.error_spot(format!("redefined global variable: `{:?}`.", name));
                         }
@@ -90,7 +130,7 @@ impl Runtime {
                 }
             } else {
                 if self.local.last().unwrap().contains_key(&name) {
-                    node.error_spot(format!("redefined variable: `{:?}`.", name));
+                    node.error_spot(format!("redefined variable: `{:?}` in this scope!", name));
                 }
             }
         }
@@ -103,7 +143,7 @@ impl Runtime {
                 .unwrap()
                 .insert(name, Var::new(basic_type, node));
         }
-    }
+    }*/
 
     fn find(&self, name: &String, node: &Node) -> (BasicType, Node) {
         // step1. 从当前局部作用域往回查找
@@ -320,6 +360,16 @@ fn traverse(node: &Node, ctx: &mut Runtime) -> Node {
                             endpos: node.endpos,
                             node_type: Access(name.clone(), indexes.clone(), Box::new(nn)),
                             basic_type: BasicType::Int,
+                        }
+                    }
+                    BasicType::Float => {
+                        let mut nn = n.clone();
+                        nn.basic_type = basic_type.clone();
+                        Node {
+                            startpos: node.startpos,
+                            endpos: node.endpos,
+                            node_type: Access(name.clone(), indexes.clone(), Box::new(nn)),
+                            basic_type: BasicType::Float,
                         }
                     }
                     BasicType::IntArray(dims) | BasicType::ConstArray(dims) => {
