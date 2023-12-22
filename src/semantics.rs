@@ -1,7 +1,3 @@
-#![allow(unused_variables)]
-#![allow(dead_code)]
-#![allow(unused_imports)]
-
 use crate::{parser::Node, BasicType, NodeType, Scope, TokenType};
 use colored::Colorize;
 use std::{collections::HashMap, fs::File, io::Read, path::Path, usize};
@@ -84,34 +80,30 @@ impl Runtime {
                         "Error type 4 at this line: function `{}` has already defined here!",
                         name
                     ));
-                    return;
                 }
             }
         }
 
-        // step2. Check for redefined global variables
+        // step2. Check for redefined variables
         if matches!(node.node_type, NodeType::Decl(..)) {
             if self.local.is_empty() {
                 if let Some(val) = self.global.get(&name) {
-                    if !matches!(node.node_type, NodeType::Func(..)) {
+                    if !matches!(val.node.node_type, NodeType::Func(..)) {
                         node.error_spot(format!(
                             "Error type 2 at this line: redefined global variable: `{}`.",
                             name
                         ));
-                        return;
                     }
                 }
-            }
-        } else {
-            if self.local.last().unwrap().contains_key(&name) {
-                node.error_spot(format!(
-                    "Error type 2 at this line: redefined variable: `{}` in this scope!",
-                    name
-                ));
-                return;
+            } else {
+                if self.local.last().unwrap().contains_key(&name) {
+                    node.error_spot(format!(
+                        "Error type 2 at this line: redefined variable: `{}` in this scope!",
+                        name
+                    ))
+                }
             }
         }
-
         // step3. Insert into the global or current scope
         if self.local.is_empty() || matches!(node.node_type, NodeType::Func(..)) {
             self.global.insert(name, Var::new(basic_type, node));
@@ -135,8 +127,8 @@ impl Runtime {
             return (var.basic_type.clone(), var.node.clone());
         } else {
             // 根据node的类型是函数还是其它分别输出不同的信息
-            match node.basic_type {
-                BasicType::Func(..) => {
+            match node.node_type {
+                NodeType::Func(..) => {
                     node.error_spot(format!(
                         "Error type 3 at this line: undefined function `{:?}`",
                         name.clone()
@@ -479,8 +471,8 @@ fn traverse(node: &Node, ctx: &mut Runtime) -> Node {
                                 && new_index.basic_type != BasicType::Const
                             {
                                 node.error_spot(format!(
-                                    "Index of array {} should be int/const",
-                                    name
+                                    "Error type 7 at this line: Index of array `{}` is not an integer",
+                                    name, 
                                 ));
                             }
                             new_indexes.push(new_index);
@@ -514,13 +506,13 @@ fn traverse(node: &Node, ctx: &mut Runtime) -> Node {
             let new_lhs = traverse(&lhs, ctx);
             if new_lhs.basic_type != BasicType::Int && new_lhs.basic_type != BasicType::Const {
                 lhs.error_spot(format!(
-                    "Error type 11 at this line:Expression at the left of the operator should match each other"
+                    "Error type 11 at this line: type mismatched for operands."
                 ));
             }
             let new_rhs = traverse(&rhs, ctx);
             if new_rhs.basic_type != BasicType::Int && new_rhs.basic_type != BasicType::Const {
                 rhs.error_spot(format!(
-                    "Error type 11 at this line:Expression at the right of the operator should be match each other"
+                    "Error type 11 at this line: type mismatched for operands."
                 ));
             }
             if new_lhs.basic_type == BasicType::Const && new_rhs.basic_type == BasicType::Const {
@@ -651,7 +643,7 @@ fn traverse(node: &Node, ctx: &mut Runtime) -> Node {
         Return(expr) => {
             let new_expr: Option<Box<Node>>;
             let mut ret_type: BasicType;
-            let (name, ret) = ctx.get_cur_func();
+            let (_, ret) = ctx.get_cur_func();
             if let Some(exp) = expr {
                 let new_exp = traverse(exp, ctx);
                 ret_type = new_exp.basic_type.clone();
@@ -664,7 +656,7 @@ fn traverse(node: &Node, ctx: &mut Runtime) -> Node {
                 ret_type = BasicType::Int;
             }
             if ret_type != ret {
-                node.error_spot(format!("Return type of {} does not match", name));
+                node.error_spot(format!("Error 10 at this line : type mismatched for return"));
             }
             Node {
                 startpos: node.startpos,

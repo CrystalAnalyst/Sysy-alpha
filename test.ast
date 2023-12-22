@@ -3,9 +3,8 @@
 |----DeclStmt
 |------Declare of i(Int) in Local scope
 |--------Number 1
-|----Assign j
-|------Binop Plus
+|----ExprStmt
+|------Function call inc
 |--------Access i
-|--------Number 1
 |----Return
 |------Number 0

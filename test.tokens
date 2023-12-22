@@ -7,34 +7,32 @@ Token{	line:1	type:LeftParen	value:"("	}
 TokenNo:3
 Token{	line:1	type:RightParen	value:")"	}
 TokenNo:4
-Token{	line:2	type:LeftBrace	value:"{"	}
+Token{	line:1	type:LeftBrace	value:"{"	}
 TokenNo:5
-Token{	line:3	type:Int	value:"int"	}
+Token{	line:2	type:Int	value:"int"	}
 TokenNo:6
-Token{	line:3	type:Identifier("i")	value:"i"	}
+Token{	line:2	type:Identifier("i")	value:"i"	}
 TokenNo:7
-Token{	line:3	type:Assign	value:"="	}
+Token{	line:2	type:Assign	value:"="	}
 TokenNo:8
-Token{	line:3	type:IntNumber(1)	value:""	}
+Token{	line:2	type:IntNumber(1)	value:""	}
 TokenNo:9
-Token{	line:3	type:Semicolon	value:";"	}
+Token{	line:2	type:Semicolon	value:";"	}
 TokenNo:10
-Token{	line:4	type:Identifier("j")	value:"j"	}
+Token{	line:3	type:Identifier("inc")	value:"inc"	}
 TokenNo:11
-Token{	line:4	type:Assign	value:"="	}
+Token{	line:3	type:LeftParen	value:"("	}
 TokenNo:12
-Token{	line:4	type:Identifier("i")	value:"i"	}
+Token{	line:3	type:Identifier("i")	value:"i"	}
 TokenNo:13
-Token{	line:4	type:Plus	value:"+"	}
+Token{	line:3	type:RightParen	value:")"	}
 TokenNo:14
-Token{	line:4	type:IntNumber(1)	value:""	}
+Token{	line:3	type:Semicolon	value:";"	}
 TokenNo:15
-Token{	line:4	type:Semicolon	value:";"	}
+Token{	line:4	type:Return	value:"return"	}
 TokenNo:16
-Token{	line:5	type:Return	value:"return"	}
+Token{	line:4	type:IntNumber(0)	value:""	}
 TokenNo:17
-Token{	line:5	type:IntNumber(0)	value:""	}
+Token{	line:4	type:Semicolon	value:";"	}
 TokenNo:18
-Token{	line:5	type:Semicolon	value:";"	}
-TokenNo:19
-Token{	line:6	type:RightBrace	value:"}"	}
+Token{	line:5	type:RightBrace	value:"}"	}
