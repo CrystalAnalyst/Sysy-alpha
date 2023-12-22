@@ -1,6 +1,3 @@
-int main()
-{
-    int i, j;
-    int i;
+int main() {
     return 0;
 }

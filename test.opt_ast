@@ -1,9 +1,0 @@
-|Func main,returns Int
-|--Block
-|----DeclStmt
-|------Declare of i(Int) in Local scope
-|------Declare of j(Int) in Local scope
-|----DeclStmt
-|------Declare of i(Int) in Local scope
-|----Return
-|------Number 0 with type Nil

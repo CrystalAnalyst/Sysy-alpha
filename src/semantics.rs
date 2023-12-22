@@ -81,12 +81,16 @@ impl Runtime {
             if self.local.is_empty() {
                 if let Some(val) = self.global.get(&name) {
                     if matches!(val.node.node_type, NodeType::Decl(..)) {
-                        node.error_spot("this variable had already been declared!".into());
+                        if matches!(val.node.basic_type, BasicType::Func(..)) {
+                            node.error_spot(format!("redefined function: `{:?}`.", name));
+                        } else {
+                            node.error_spot(format!("redefined global variable: `{:?}`.", name));
+                        }
                     }
                 }
             } else {
                 if self.local.last().unwrap().contains_key(&name) {
-                    node.error_spot("this variable had already been declared!".into());
+                    node.error_spot(format!("redefined variable: `{:?}`.", name));
                 }
             }
         }
@@ -805,7 +809,6 @@ fn expand_inits(
             .unwrap()
             .error_spot(format!("Dimension of initializer exceeded"));
     }
-    // max为各维度长度的乘积, 就是总元素的个数.
     let mut max = 1;
     for dim_node in dims.get(level..).unwrap() {
         if let NodeType::Number(dim) = dim_node.node_type {
@@ -854,8 +857,8 @@ fn expand_inits(
 pub fn semantic(ast: &Vec<Node>, path: &String) -> Vec<Node> {
     unsafe { FILEPATH = path.clone() }
     let mut ctx = Runtime::new();
-    /* 遍历AST树, 并对每个节点进行"语义分析", 相当于AST的interpreter(解释器) */
     let mut new_nodes = vec![];
+    /* 遍历AST树, 并对每个节点进行"语义分析", 相当于AST的interpreter(解释器) */
     for node in ast {
         match &node.node_type {
             NodeType::DeclStmt(_) => {

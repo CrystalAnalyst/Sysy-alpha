@@ -1,4 +1,4 @@
 |Func main,returns Int
 |--Block
 |----Return
-|------Number 0
+|------Number 0 with type Nil
