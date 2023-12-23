@@ -1,5 +1,14 @@
+int func(int i) {
+    int a;
+    int a = i + 1;
+    return a;
+}
 int main() {
-    int i = 1;
-    inc(i);
-    return 0;
+    int a = 2;
+    float j = 1.1;
+    j + 10;
+    int b[10];
+    b[1.5] = 3;
+    func(2,3);
+    return j;
 }

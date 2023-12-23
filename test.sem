@@ -1,9 +1,35 @@
+|Func func,returns Int
+|--Declare of i(Int) in Params scope
+|--Block
+|----DeclStmt
+|------Declare of a(Int) in Local scope
+|----DeclStmt
+|------Declare of a(Int) in Local scope
+|--------Binop Plus[Semantic-check] with type: Int
+|----------Access i[Semantic-check] with type: Int
+|----------Number 1[Semantic-check] with type: Const
+|----Return
+|------Access a[Semantic-check] with type: Int
 |Func main,returns Int
 |--Block
 |----DeclStmt
-|------Declare of i(Int) in Local scope
-|--------Number 1[Semantic-check] with type: Const
+|------Declare of a(Int) in Local scope
+|--------Number 2[Semantic-check] with type: Const
+|----DeclStmt
+|------Declare of j(Float) in Local scope
+|--------FloatNumber 1.1[Semantic-check] with type: Float
 |----ExprStmt
-|------Nil
+|------Binop Plus[Semantic-check] with type: Int
+|--------Access j[Semantic-check] with type: Float
+|--------Number 10[Semantic-check] with type: Const
+|----DeclStmt
+|------Declare of b(IntArray([10])) in Local scope
+|--------Number 10[Semantic-check] with type: Const
+|----Assign b
+|------FloatNumber 1.5[Semantic-check] with type: Float
+|------Number 3[Semantic-check] with type: Const
+|----ExprStmt
+|------Function call func[Semantic-check] with type: Int
+|--------Number 2[Semantic-check] with type: Const
 |----Return
-|------Number 0[Semantic-check] with type: Const
+|------Access j[Semantic-check] with type: Float
