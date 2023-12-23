@@ -2,8 +2,8 @@
 |--Block
 |----DeclStmt
 |------Declare of i(Int) in Local scope
-|------Declare of j(Int) in Local scope
-|----DeclStmt
-|------Declare of i(Int) in Local scope
+|--------Number 1[Semantic-check] with type: Const
+|----ExprStmt
+|------Nil
 |----Return
 |------Number 0[Semantic-check] with type: Const

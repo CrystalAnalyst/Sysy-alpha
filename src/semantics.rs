@@ -126,23 +126,22 @@ impl Runtime {
         if let Some(var) = self.global.get(name) {
             return (var.basic_type.clone(), var.node.clone());
         } else {
-            // 根据node的类型是函数还是其它分别输出不同的信息
             match node.node_type {
-                NodeType::Func(..) => {
+                NodeType::Call(..) => {
                     node.error_spot(format!(
                         "Error type 3 at this line: undefined function `{:?}`",
-                        name.clone()
+                        name
                     ));
                 }
                 _ => {
                     node.error_spot(format!(
                         "Error type 1 at this line: undefined variable {:?}.",
-                        name.clone()
+                        name
                     ));
                 }
             }
-            unreachable!();
         }
+        (BasicType::Nil, Node::new(NodeType::Nil))
     }
 }
 
@@ -597,7 +596,7 @@ fn traverse(node: &Node, ctx: &mut Runtime) -> Node {
                     "Error type 5 at this line: {} is not a function!",
                     name
                 ));
-                unreachable!();
+                Node::new(NodeType::Nil)
             }
         }
         Func(ret, name, args, body) => {
