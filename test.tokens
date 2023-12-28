@@ -131,142 +131,140 @@ Token{	line:21	type:RightParen	value:")"	}
 TokenNo:65
 Token{	line:21	type:Semicolon	value:";"	}
 TokenNo:66
-Token{	line:23	type:Identifier("func")	value:"func"	}
+Token{	line:23	type:Int	value:"int"	}
 TokenNo:67
-Token{	line:23	type:Assign	value:"="	}
+Token{	line:23	type:Identifier("recv")	value:"recv"	}
 TokenNo:68
-Token{	line:23	type:Identifier("func")	value:"func"	}
+Token{	line:23	type:Assign	value:"="	}
 TokenNo:69
-Token{	line:23	type:Plus	value:"+"	}
+Token{	line:23	type:Identifier("func")	value:"func"	}
 TokenNo:70
-Token{	line:23	type:IntNumber(1)	value:""	}
-TokenNo:71
 Token{	line:23	type:Semicolon	value:";"	}
-TokenNo:72
+TokenNo:71
 Token{	line:25	type:Int	value:"int"	}
-TokenNo:73
+TokenNo:72
 Token{	line:25	type:Identifier("arr")	value:"arr"	}
-TokenNo:74
+TokenNo:73
 Token{	line:25	type:LeftBracket	value:"["	}
-TokenNo:75
+TokenNo:74
 Token{	line:25	type:IntNumber(3)	value:""	}
-TokenNo:76
+TokenNo:75
 Token{	line:25	type:RightBracket	value:"]"	}
-TokenNo:77
+TokenNo:76
 Token{	line:25	type:Assign	value:"="	}
-TokenNo:78
+TokenNo:77
 Token{	line:25	type:LeftBrace	value:"{"	}
-TokenNo:79
+TokenNo:78
 Token{	line:25	type:IntNumber(0)	value:""	}
+TokenNo:79
+Token{	line:25	type:Comma	value:","	}
 TokenNo:80
-Token{	line:25	type:Comma	value:","	}
-TokenNo:81
 Token{	line:25	type:IntNumber(1)	value:""	}
-TokenNo:82
+TokenNo:81
 Token{	line:25	type:Comma	value:","	}
-TokenNo:83
+TokenNo:82
 Token{	line:25	type:IntNumber(2)	value:""	}
-TokenNo:84
+TokenNo:83
 Token{	line:25	type:RightBrace	value:"}"	}
-TokenNo:85
+TokenNo:84
 Token{	line:25	type:Semicolon	value:";"	}
-TokenNo:86
+TokenNo:85
 Token{	line:26	type:Identifier("arr")	value:"arr"	}
-TokenNo:87
+TokenNo:86
 Token{	line:26	type:LeftBracket	value:"["	}
-TokenNo:88
+TokenNo:87
 Token{	line:26	type:FloatNumber(1.5)	value:""	}
-TokenNo:89
+TokenNo:88
 Token{	line:26	type:RightBracket	value:"]"	}
-TokenNo:90
+TokenNo:89
 Token{	line:26	type:Assign	value:"="	}
-TokenNo:91
+TokenNo:90
 Token{	line:26	type:IntNumber(2)	value:""	}
-TokenNo:92
+TokenNo:91
 Token{	line:26	type:Semicolon	value:";"	}
-TokenNo:93
+TokenNo:92
 Token{	line:28	type:Int	value:"int"	}
-TokenNo:94
+TokenNo:93
 Token{	line:28	type:Identifier("non_arr")	value:"non_arr"	}
-TokenNo:95
+TokenNo:94
 Token{	line:28	type:Assign	value:"="	}
-TokenNo:96
+TokenNo:95
 Token{	line:28	type:IntNumber(0)	value:""	}
-TokenNo:97
+TokenNo:96
 Token{	line:28	type:Semicolon	value:";"	}
-TokenNo:98
+TokenNo:97
 Token{	line:29	type:Identifier("non_arr")	value:"non_arr"	}
-TokenNo:99
+TokenNo:98
 Token{	line:29	type:LeftBracket	value:"["	}
-TokenNo:100
+TokenNo:99
 Token{	line:29	type:IntNumber(3)	value:""	}
-TokenNo:101
+TokenNo:100
 Token{	line:29	type:RightBracket	value:"]"	}
-TokenNo:102
+TokenNo:101
 Token{	line:29	type:Assign	value:"="	}
-TokenNo:103
+TokenNo:102
 Token{	line:29	type:IntNumber(1)	value:""	}
-TokenNo:104
+TokenNo:103
 Token{	line:29	type:Semicolon	value:";"	}
-TokenNo:105
+TokenNo:104
 Token{	line:31	type:Identifier("func")	value:"func"	}
-TokenNo:106
+TokenNo:105
 Token{	line:31	type:LeftParen	value:"("	}
-TokenNo:107
+TokenNo:106
 Token{	line:31	type:IntNumber(1)	value:""	}
-TokenNo:108
+TokenNo:107
 Token{	line:31	type:RightParen	value:")"	}
-TokenNo:109
+TokenNo:108
 Token{	line:31	type:Semicolon	value:";"	}
-TokenNo:110
+TokenNo:109
 Token{	line:33	type:Int	value:"int"	}
-TokenNo:111
+TokenNo:110
 Token{	line:33	type:Identifier("var")	value:"var"	}
-TokenNo:112
+TokenNo:111
 Token{	line:33	type:Assign	value:"="	}
-TokenNo:113
+TokenNo:112
 Token{	line:33	type:IntNumber(1)	value:""	}
-TokenNo:114
+TokenNo:113
 Token{	line:33	type:Semicolon	value:";"	}
-TokenNo:115
+TokenNo:114
 Token{	line:34	type:Int	value:"int"	}
-TokenNo:116
+TokenNo:115
 Token{	line:34	type:Identifier("res")	value:"res"	}
-TokenNo:117
+TokenNo:116
 Token{	line:34	type:Assign	value:"="	}
-TokenNo:118
+TokenNo:117
 Token{	line:34	type:Identifier("var")	value:"var"	}
-TokenNo:119
+TokenNo:118
 Token{	line:34	type:Plus	value:"+"	}
-TokenNo:120
+TokenNo:119
 Token{	line:34	type:Identifier("arr")	value:"arr"	}
-TokenNo:121
+TokenNo:120
 Token{	line:34	type:Semicolon	value:";"	}
-TokenNo:122
+TokenNo:121
 Token{	line:36	type:Break	value:"break"	}
-TokenNo:123
+TokenNo:122
 Token{	line:36	type:Semicolon	value:";"	}
-TokenNo:124
+TokenNo:123
 Token{	line:37	type:Continue	value:"continue"	}
-TokenNo:125
+TokenNo:124
 Token{	line:37	type:Semicolon	value:";"	}
-TokenNo:126
+TokenNo:125
 Token{	line:38	type:RightBrace	value:"}"	}
-TokenNo:127
+TokenNo:126
 Token{	line:41	type:Float	value:"float"	}
-TokenNo:128
+TokenNo:127
 Token{	line:41	type:Identifier("Pi")	value:"Pi"	}
-TokenNo:129
+TokenNo:128
 Token{	line:41	type:LeftParen	value:"("	}
-TokenNo:130
+TokenNo:129
 Token{	line:41	type:RightParen	value:")"	}
-TokenNo:131
+TokenNo:130
 Token{	line:41	type:LeftBrace	value:"{"	}
-TokenNo:132
+TokenNo:131
 Token{	line:42	type:Return	value:"return"	}
-TokenNo:133
+TokenNo:132
 Token{	line:42	type:IntNumber(3)	value:""	}
-TokenNo:134
+TokenNo:133
 Token{	line:42	type:Semicolon	value:";"	}
-TokenNo:135
+TokenNo:134
 Token{	line:43	type:RightBrace	value:"}"	}

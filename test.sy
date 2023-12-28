@@ -20,7 +20,7 @@ int main() {
     // error 5
     b();
     // error 6
-    func = func + 1;
+    int recv = func;
     // error 7
     int arr[3] = {0, 1, 2};
     arr[1.5] = 2;

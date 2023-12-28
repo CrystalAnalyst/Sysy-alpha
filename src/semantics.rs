@@ -401,10 +401,11 @@ fn traverse(node: &Node, ctx: &mut Runtime) -> Node {
                 }
             } else {
                 node.error_spot(format!(
-                    "{} cannot be accessed since it is a function",
+                    "Error type 6 : {} cannot be accessed since it is a function",
                     name
                 ));
-                unreachable!()
+                //unreachable!()
+                Node::new(Nil)
             }
         }
         Assign(name, indexes, expr, _) => {

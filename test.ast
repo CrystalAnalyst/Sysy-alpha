@@ -31,10 +31,9 @@
 |--------Number 2
 |----ExprStmt
 |------Function call b
-|----Assign func
-|------Binop Plus
+|----DeclStmt
+|------Declare of recv(Int) in Local scope
 |--------Access func
-|--------Number 1
 |----DeclStmt
 |------Declare of arr(Int) in Local scope
 |--------Number 3

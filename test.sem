@@ -28,7 +28,9 @@
 |------Nil
 |----ExprStmt
 |------Nil
-|----Nil
+|----DeclStmt
+|------Declare of recv(Int) in Local scope
+|--------Nil
 |----DeclStmt
 |------Declare of arr(IntArray([3])) in Local scope
 |--------Number 3[Semantic-check] with type: Const
