@@ -1,14 +1,43 @@
-int func(int i) {
-    int a;
-    int a = i + 1;
+int ok() {
+    return 0;
+}
+int ok (int a) {
     return a;
 }
+
+int func(int x,int y) {
+    return x + y;
+}
+
 int main() {
-    int a = 2;
-    float j = 1.1;
-    j + 10;
-    int b[10];
-    b[1.5] = 3;
-    func(2,3);
-    return j;
+    // error 1 
+    a = 1; 
+    // error 2
+    int b = 2;
+    int b = 3;
+    // error 3 
+    add(1, 2);
+    // error 5
+    b();
+    // error 6
+    func = func + 1;
+    // error 7
+    int arr[3] = {0, 1, 2};
+    arr[1.5] = 2;
+    //error 8
+    int non_arr = 0;
+    non_arr[3] = 1; 
+    //error 9
+    func(1);
+    //error 11
+    int var = 1;
+    int res = var + arr;
+    //error 12 & 13
+    break;
+    continue;
+}
+
+// error 10
+float Pi() {
+    return 3;
 }

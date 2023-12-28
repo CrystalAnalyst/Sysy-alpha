@@ -152,8 +152,9 @@ impl Lexer {
         }
     }
 
+    //  解析10进制整数和浮点数.
     fn parse_decimal(&mut self) {
-        let start = self.current; // Store the initial value of self.current
+        let start = self.current;
         let mut integer_sum = 0;
         let mut integer_len = 0;
         let mut fraction_sum = 0;
@@ -175,27 +176,22 @@ impl Lexer {
             }
         }
         if is_float && fraction_len > 0 {
-            // Calculate the floating-point value
             let float_value =
                 integer_sum as f64 + fraction_sum as f64 / 10_f64.powi(fraction_len as i32);
-            // Update the current position after the number
             self.current = start + integer_len + fraction_len + 1;
-            // Create a token for the floating-point number
             let mut t = self.new_token(TokenType::FloatNumber(float_value as f32));
             t.endpos = self.current;
             self.tokens.push(t);
         } else {
-            // Calculate the integer value
             let int_value = integer_sum;
-            // Update the current position after the number
             self.current = start + integer_len;
-            // Create a token for the integer number
             let mut t = self.new_token(TokenType::IntNumber(int_value as i32));
             t.endpos = self.current;
             self.tokens.push(t);
         }
     }
 
+    //解析8进制和16进制数,同时进行进制表示检查。
     fn parse_number(&mut self, base: u32) {
         let light = match base {
             8 => 1,
@@ -232,8 +228,7 @@ impl Lexer {
                 break;
             }
         }
-        // Calculate the new value of self.current after the loop
-        self.current = start + len; // Update self.current outside the loop
+        self.current = start + len;
         if flag {
             let mut t = self.new_token(TokenType::IntNumber(sum));
             t.endpos = self.current;

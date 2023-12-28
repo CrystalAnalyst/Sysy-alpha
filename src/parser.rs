@@ -103,7 +103,7 @@ impl Parser {
             TokenType::Int => Some(BasicType::Int),
             TokenType::Float => Some(BasicType::Float),
             TokenType::Const => {
-                self.type_check(TokenType::Int); //从这里你可以看出Const是怎么被解析的, 读一个Const马上要读一个Int.
+                self.type_check(TokenType::Int); //读一个Const马上要读一个Int.
                 Some(BasicType::Const)
             }
             _ => {
@@ -262,7 +262,6 @@ impl Parser {
     }
 
     fn stmt(&mut self) -> Node {
-        /* 这个函数是一切问题的答案, 一切智慧的总和。 */
         let startpos = self.get_startpos();
         let t = self.get_current_token();
         self.current += 1;
@@ -447,81 +446,6 @@ impl Parser {
             None => Node::zero_init().bound(startpos, endpos),
         }
     }
-
-    /* primary_exp: 基本表达式
-     *    - Ident
-     *    - Number
-     *    - LeftParen const_exp RightParen */
-    /*fn primary_exp(&mut self, cond: bool) -> Node {
-        /*
-         * 1. primary_exp:
-         *    - (LeftParen const_exp RightParen)
-         *    - Lval -> Ident[Exp]
-         *    - Number
-         */
-
-        //get the current token, record its start_pos and move the token_index forward.
-        let t = self.get_current_token();
-        let startpos = t.startpos;
-        self.current += 1;
-
-        // then match the token type
-        let result = match &t.sort {
-            //下面共罗列了四种case, 如果四种case都不是则会报错.
-            TokenType::LeftParen => {
-                let exp = self.const_exp(cond);
-                self.type_check(TokenType::RightParen);
-                Some(exp)
-            }
-            TokenType::IntNumber(num) => Some(Node::new(NodeType::Number(*num))),
-            TokenType::FloatNumber(num) => Some(Node::new(NodeType::FloatNumber(*num))),
-            TokenType::Identifier(id) => {
-                //Function call, 明确概念：函数的调用是表达式, 而函数的声明是语句.
-                //这里处理的都是表达式, 所以不会出现函数声明的情况, 所以遇到函数就解析成Call
-                if self.type_judge(TokenType::LeftParen) {
-                    let mut args = vec![]; //用来存放函数的参数
-                    if !self.type_judge(TokenType::RightParen) {
-                        //Has arguments, 这是个有函数的参数, 即funcName(arg1, arg2,...)
-                        args.push(self.const_exp(cond)); //将参数放入args
-                        while self.type_judge(TokenType::Comma) {
-                            //如果遇到逗号, 则说明有多个参数, 即funcName(arg1, arg2,...)
-                            args.push(self.const_exp(cond)); //继续将参数放入args
-                        }
-                        self.type_check(TokenType::RightParen); //遇到右括号, 说明已经处理完毕, 即(arg1, arg2,...).
-                        Some(Node::new(NodeType::Call(
-                            //Call
-                            id.clone(),
-                            args,
-                            Box::new(Node::zero_init()),
-                        )))
-                    } else {
-                        //No arguments, 这是个没有函数的参数, 即funcName(), 自然就是调用Call
-                        Some(Node::new(NodeType::Call(
-                            id.clone(),
-                            args,
-                            Box::new(Node::zero_init()),
-                        )))
-                    }
-                }
-                //Array access
-                else {
-                    //处理类似于array[index]这样的下标访问,
-                    Some(Node::new(NodeType::Aceess(
-                        id.to_string(),
-                        self.seek_array(false),
-                        Box::new(Node::zero_init()),
-                    )))
-                }
-            }
-            _ => {
-                t.wrong_token("Error type B at this line : Expression cannot resolved!".into());
-                None
-            }
-        };
-        let endpos = self.get_endpos();
-        //result.expect("Wrong expession").bound(startpos, endpos)
-        result.expect("").bound(startpos, endpos)
-    }*/
 
     /* Unary expessions:一元表达式 */
     // 明确一点, SysY语言的单目运算符(作用于单独一个变量的运算符)有+,-,!
@@ -771,8 +695,6 @@ impl Token {
             "|",
             errline //errline才是错误的具体内容
         );
-
-        //指出完毕你的错误, 然后教你怎么改正错误(suggestion), type_check是关键.
         print!("   {}", "|");
         for _ in 0..self.startpos - lstart + 1 {
             print!("{}", ' ');

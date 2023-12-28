@@ -14,7 +14,7 @@ fn main() {
     let tokens = tokenize(source_path);
     print_tokens(&tokens, Path::new(&token_path));
 
-    /* 语法分析, 词法单元流tokens -> 语法树ast, todo: 支持浮点类型的语法分析 */
+    /* 语法分析, 词法单元流tokens -> 语法树ast, [feat]:支持浮点类型的语法分析 */
     let ast = parse(tokens);
     print_tree(&ast, Path::new(&ast_path), "ast", false);
 

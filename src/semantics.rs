@@ -139,9 +139,8 @@ impl Runtime {
                         name
                     ));
                 }
-             
             }
-        unreachable!()   
+            return (BasicType::Nil, Node::new(NodeType::Nil))  
         }
     }
 }
@@ -494,12 +493,12 @@ fn traverse(node: &Node, ctx: &mut Runtime) -> Node {
                     }
                     _ => unreachable!(),
                 }
-            } else {
+            } else {   
                 node.error_spot(format!(
-                    "Error type 6 at this line: Cannot assign to function `{}`",
+                    "Error type 6 at this line: You can't use a function like a variable: `{}` !",
                     name
                 ));
-                unreachable!()
+                Node::new(NodeType::Nil)
             }
         }
         BinOp(ttype, lhs, rhs) => {
@@ -656,7 +655,7 @@ fn traverse(node: &Node, ctx: &mut Runtime) -> Node {
                 ret_type = BasicType::Int;
             }
             if ret_type != ret {
-                node.error_spot(format!("Error 10 at this line : type mismatched for return"));
+                node.error_spot(format!("Error type 10 at this line : type mismatched for return"));
             }
             Node {
                 startpos: node.startpos,
@@ -904,7 +903,7 @@ pub fn semantic(ast: &Vec<Node>, path: &String) -> Vec<Node> {
     unsafe { FILEPATH = path.clone() }
     let mut ctx = Runtime::new();
     let mut new_nodes = vec![];
-    /* 遍历AST树, 并对每个节点进行"语义分析", 相当于AST的interpreter(解释器) */
+    /* 遍历AST树, 并对每个节点进行"语义分析"(实际上就是语义检查+类型判断), 相当于AST的interpreter(解释器) */
     for node in ast {
         match &node.node_type {
             NodeType::DeclStmt(_) => {
